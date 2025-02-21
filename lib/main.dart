@@ -1,5 +1,6 @@
 import 'package:bakalarska_prace_pilny/background_gradient.dart';
 import 'package:bakalarska_prace_pilny/language_selection.dart';
+import 'package:bakalarska_prace_pilny/level_language.dart';
 import 'package:bakalarska_prace_pilny/registration.dart';
 import 'package:flutter/material.dart';
 import 'language_mapper.dart';
@@ -84,7 +85,11 @@ class LoginPage extends StatelessWidget {
                 // Login Button
                 ElevatedButton(
                   onPressed: () {
-                    // Handle login action
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => LevelLanguagePage(language: language),
+                      ),
+                    );
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(

@@ -43,6 +43,7 @@ class LanguageMapper {
     'first_name': 'Jméno:',
     'last_name': 'Příjmení:',
     'email': 'Email:',
+    'select_level': 'Vyberte úroveň',
   };
 
   static const Map<String, String> _enTitles = {
@@ -59,6 +60,7 @@ class LanguageMapper {
     'first_name': 'First Name:',
     'last_name': 'Last Name:',
     'email': 'Email:',
+    'select_level': 'Select Level',
   };
 
   static const Map<String, String> _ruTitles = {
@@ -75,6 +77,7 @@ class LanguageMapper {
     'first_name': 'Имя:',
     'last_name': 'Фамилия:',
     'email': 'Эл. почта:',
+    'select_level': 'Выберите уровень',
   };
 
   static const Map<String, String> _csBodies = {
