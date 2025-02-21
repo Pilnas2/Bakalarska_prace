@@ -64,10 +64,10 @@ class IntroductionPage extends StatelessWidget {
             );
           },
           showSkipButton: true,
-          skip: Text(languageMapper.getSkipText()),
+          skip: Text(languageMapper.getTitle('skip')),
           next: const Icon(Icons.arrow_forward),
           done: Text(
-            languageMapper.getDoneText(),
+            languageMapper.getTitle('done'),
             style: const TextStyle(fontWeight: FontWeight.w600),
           ),
         ),

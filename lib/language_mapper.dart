@@ -12,7 +12,7 @@ class LanguageMapper {
       case 'ru':
         return _ruTitles[key] ?? '';
       default:
-        return '';
+        return _enTitles[key] ?? '';
     }
   }
 
@@ -25,85 +25,7 @@ class LanguageMapper {
       case 'ru':
         return _ruBodies[key] ?? '';
       default:
-        return '';
-    }
-  }
-
-  String getSkipText() {
-    switch (language) {
-      case 'cs':
-        return 'Přeskočit';
-      case 'en':
-        return 'Skip';
-      case 'ru':
-        return 'Пропустить';
-      default:
-        return 'Skip';
-    }
-  }
-
-  String getDoneText() {
-    switch (language) {
-      case 'cs':
-        return 'Hotovo';
-      case 'en':
-        return 'Done';
-      case 'ru':
-        return 'Готово';
-      default:
-        return 'Done';
-    }
-  }
-
-  String getUsernameLabel() {
-    switch (language) {
-      case 'cs':
-        return 'Uživatelské jméno:';
-      case 'en':
-        return 'Username:';
-      case 'ru':
-        return 'Имя пользователя:';
-      default:
-        return 'Username:';
-    }
-  }
-
-  String getPasswordLabel() {
-    switch (language) {
-      case 'cs':
-        return 'Heslo:';
-      case 'en':
-        return 'Password:';
-      case 'ru':
-        return 'Пароль:';
-      default:
-        return 'Password:';
-    }
-  }
-
-  String getLoginButtonText() {
-    switch (language) {
-      case 'cs':
-        return 'Přihlásit se';
-      case 'en':
-        return 'Log In';
-      case 'ru':
-        return 'Войти';
-      default:
-        return 'Log In';
-    }
-  }
-
-  String getRegisterLinkText() {
-    switch (language) {
-      case 'cs':
-        return 'Registrovat se';
-      case 'en':
-        return 'Register';
-      case 'ru':
-        return 'Зарегистрироваться';
-      default:
-        return 'Register';
+        return _enBodies[key] ?? '';
     }
   }
 
@@ -111,18 +33,48 @@ class LanguageMapper {
     'welcome': 'Vítejte',
     'learn': 'Učit se',
     'get_started': 'Začít',
+    'done': 'Hotovo',
+    'skip': 'Přeskočit',
+    'username': 'Uživatelské jméno',
+    'password': 'Heslo',
+    'login': 'Přihlásit se',
+    'register': 'Registrovat se',
+    'registration': 'Registrace',
+    'first_name': 'Jméno:',
+    'last_name': 'Příjmení:',
+    'email': 'Email:',
   };
 
   static const Map<String, String> _enTitles = {
     'welcome': 'Welcome',
     'learn': 'Learn',
     'get_started': 'Get Started',
+    'done': 'Done',
+    'skip': 'Skip',
+    'username': 'Username',
+    'password': 'Password',
+    'login': 'Log In',
+    'register': 'Register',
+    'registration': 'Registration',
+    'first_name': 'First Name:',
+    'last_name': 'Last Name:',
+    'email': 'Email:',
   };
 
   static const Map<String, String> _ruTitles = {
     'welcome': 'Добро пожаловать',
     'learn': 'Учиться',
     'get_started': 'Начать',
+    'done': 'Готово',
+    'skip': 'Пропустить',
+    'username': 'Имя пользователя',
+    'password': 'Пароль',
+    'login': 'Войти',
+    'register': 'Зарегистрироваться',
+    'registration': 'Регистрация',
+    'first_name': 'Имя:',
+    'last_name': 'Фамилия:',
+    'email': 'Эл. почта:',
   };
 
   static const Map<String, String> _csBodies = {

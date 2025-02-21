@@ -1,5 +1,6 @@
 import 'package:bakalarska_prace_pilny/background_gradient.dart';
 import 'package:bakalarska_prace_pilny/language_selection.dart';
+import 'package:bakalarska_prace_pilny/registration.dart';
 import 'package:flutter/material.dart';
 import 'language_mapper.dart';
 
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Learn Czech',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xffFF65C2)),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xff8A4AF3),
@@ -61,7 +62,7 @@ class LoginPage extends StatelessWidget {
                 // Username Field
                 TextField(
                   decoration: InputDecoration(
-                    labelText: languageMapper.getUsernameLabel(),
+                    labelText: languageMapper.getTitle('username'),
                     hintText: 'Jan123',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
@@ -73,7 +74,7 @@ class LoginPage extends StatelessWidget {
                 TextField(
                   obscureText: true,
                   decoration: InputDecoration(
-                    labelText: languageMapper.getPasswordLabel(),
+                    labelText: languageMapper.getTitle('password'),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -85,19 +86,13 @@ class LoginPage extends StatelessWidget {
                   onPressed: () {
                     // Handle login action
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff8A4AF3),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       vertical: 12,
                       horizontal: 24,
                     ),
                     child: Text(
-                      languageMapper.getLoginButtonText(),
+                      languageMapper.getTitle('login'),
                       style: const TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
@@ -106,13 +101,18 @@ class LoginPage extends StatelessWidget {
                 // Register Link
                 TextButton(
                   onPressed: () {
-                    // Navigate to registration page
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => RegistrationPage(language: language),
+                      ),
+                    );
                   },
                   child: Text(
-                    languageMapper.getRegisterLinkText(),
+                    languageMapper.getTitle('register'),
                     style: const TextStyle(
-                      color: Color(0xffFF65C2),
+                      color: Color.fromARGB(255, 211, 66, 153),
                       fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
