@@ -2,20 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'background_gradient.dart'; // Importujte BackgroundGradient
 import 'main.dart'; // Importujte LoginPage
+import 'language_mapper.dart'; // Importujte LanguageMapper
 
 class IntroductionPage extends StatelessWidget {
-  const IntroductionPage({super.key});
+  final String language;
+
+  const IntroductionPage({required this.language, super.key});
 
   @override
   Widget build(BuildContext context) {
+    final languageMapper = LanguageMapper(language);
+
     return Scaffold(
       body: BackgroundGradient(
         child: IntroductionScreen(
           pages: [
             PageViewModel(
-              title: "Welcome",
-              body:
-                  "Welcome to Learn Czech, the best app to learn Czech language.",
+              title: languageMapper.getTitle('welcome'),
+              body: languageMapper.getBody('welcome'),
               image: Center(
                 child: Image.asset(
                   "assets/images/logo_learnCzech.png",
@@ -27,8 +31,8 @@ class IntroductionPage extends StatelessWidget {
               ),
             ),
             PageViewModel(
-              title: "Learn",
-              body: "Learn Czech with interactive lessons and quizzes.",
+              title: languageMapper.getTitle('learn'),
+              body: languageMapper.getBody('learn'),
               image: Center(
                 child: Icon(Icons.school, size: 175.0, color: Colors.blue),
               ),
@@ -37,8 +41,8 @@ class IntroductionPage extends StatelessWidget {
               ),
             ),
             PageViewModel(
-              title: "Get Started",
-              body: "Sign up or log in to start learning Czech today!",
+              title: languageMapper.getTitle('get_started'),
+              body: languageMapper.getBody('get_started'),
               image: Center(
                 child: Icon(Icons.login, size: 175.0, color: Colors.green),
               ),
@@ -50,21 +54,21 @@ class IntroductionPage extends StatelessWidget {
           onDone: () {
             // When done button is press
             Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => const LoginPage()),
+              MaterialPageRoute(builder: (_) => LoginPage(language: language)),
             );
           },
           onSkip: () {
             // You can also override onSkip callback
             Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (_) => const LoginPage()),
+              MaterialPageRoute(builder: (_) => LoginPage(language: language)),
             );
           },
           showSkipButton: true,
-          skip: const Text("Skip"),
+          skip: Text(languageMapper.getSkipText()),
           next: const Icon(Icons.arrow_forward),
-          done: const Text(
-            "Done",
-            style: TextStyle(fontWeight: FontWeight.w600),
+          done: Text(
+            languageMapper.getDoneText(),
+            style: const TextStyle(fontWeight: FontWeight.w600),
           ),
         ),
       ),

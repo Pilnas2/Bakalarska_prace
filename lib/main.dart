@@ -1,6 +1,7 @@
 import 'package:bakalarska_prace_pilny/background_gradient.dart';
 import 'package:bakalarska_prace_pilny/language_selection.dart';
 import 'package:flutter/material.dart';
+import 'language_mapper.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,22 +17,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Learn Czech',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xff8A4AF3),
+            foregroundColor: Colors.white,
+          ),
+        ),
       ),
       home: const LanguageSelectionPage(),
     );
@@ -39,10 +31,14 @@ class MyApp extends StatelessWidget {
 }
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  final String language;
+
+  const LoginPage({required this.language, super.key});
 
   @override
   Widget build(BuildContext context) {
+    final languageMapper = LanguageMapper(language);
+
     return Scaffold(
       body: BackgroundGradient(
         child: Center(
@@ -65,7 +61,7 @@ class LoginPage extends StatelessWidget {
                 // Username Field
                 TextField(
                   decoration: InputDecoration(
-                    labelText: 'Uživatelské jméno:',
+                    labelText: languageMapper.getUsernameLabel(),
                     hintText: 'Jan123',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
@@ -77,7 +73,7 @@ class LoginPage extends StatelessWidget {
                 TextField(
                   obscureText: true,
                   decoration: InputDecoration(
-                    labelText: 'Heslo:',
+                    labelText: languageMapper.getPasswordLabel(),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -95,11 +91,14 @@ class LoginPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 24,
+                    ),
                     child: Text(
-                      'Přihlásit se',
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+                      languageMapper.getLoginButtonText(),
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
                 ),
@@ -109,9 +108,12 @@ class LoginPage extends StatelessWidget {
                   onPressed: () {
                     // Navigate to registration page
                   },
-                  child: const Text(
-                    'Registrovat se',
-                    style: TextStyle(color: Color(0xffFF65C2), fontSize: 16),
+                  child: Text(
+                    languageMapper.getRegisterLinkText(),
+                    style: const TextStyle(
+                      color: Color(0xffFF65C2),
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ],
