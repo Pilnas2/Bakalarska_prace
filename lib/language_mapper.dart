@@ -40,9 +40,9 @@ class LanguageMapper {
     'login': 'Přihlásit se',
     'register': 'Registrovat se',
     'registration': 'Registrace',
-    'first_name': 'Jméno:',
-    'last_name': 'Příjmení:',
-    'email': 'Email:',
+    'first_name': 'Jméno',
+    'last_name': 'Příjmení',
+    'email': 'Email',
     'select_level': 'Vyberte úroveň',
   };
 
@@ -57,9 +57,9 @@ class LanguageMapper {
     'login': 'Log In',
     'register': 'Register',
     'registration': 'Registration',
-    'first_name': 'First Name:',
-    'last_name': 'Last Name:',
-    'email': 'Email:',
+    'first_name': 'First Name',
+    'last_name': 'Last Name',
+    'email': 'Email',
     'select_level': 'Select Level',
   };
 
@@ -74,9 +74,9 @@ class LanguageMapper {
     'login': 'Войти',
     'register': 'Зарегистрироваться',
     'registration': 'Регистрация',
-    'first_name': 'Имя:',
-    'last_name': 'Фамилия:',
-    'email': 'Эл. почта:',
+    'first_name': 'Имя',
+    'last_name': 'Фамилия',
+    'email': 'Эл. почта',
     'select_level': 'Выберите уровень',
   };
 
