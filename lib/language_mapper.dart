@@ -44,6 +44,11 @@ class LanguageMapper {
     'last_name': 'Příjmení',
     'email': 'Email',
     'select_level': 'Vyberte úroveň',
+    'please_enter_first_name': 'Prosím zadejte jméno',
+    'please_enter_last_name': 'Prosím zadejte příjmení',
+    'please_enter_username': 'Prosím zadejte uživatelské jméno',
+    'please_enter_email': 'Prosím zadejte email',
+    'please_enter_password': 'Prosím zadejte heslo',
   };
 
   static const Map<String, String> _enTitles = {
@@ -61,6 +66,11 @@ class LanguageMapper {
     'last_name': 'Last Name',
     'email': 'Email',
     'select_level': 'Select Level',
+    'please_enter_first_name': 'Please enter first name',
+    'please_enter_last_name': 'Please enter last name',
+    'please_enter_username': 'Please enter username',
+    'please_enter_email': 'Please enter email',
+    'please_enter_password': 'Please enter password',
   };
 
   static const Map<String, String> _ruTitles = {
@@ -78,6 +88,11 @@ class LanguageMapper {
     'last_name': 'Фамилия',
     'email': 'Эл. почта',
     'select_level': 'Выберите уровень',
+    'please_enter_first_name': 'Пожалуйста, введите имя',
+    'please_enter_last_name': 'Пожалуйста, введите фамилию',
+    'please_enter_username': 'Пожалуйста, введите Пожал',
+    'please_enter_email': 'Пожалуйста, введите адрес электронной почты',
+    'please_enter_password': 'Пожалуйста, введите пароль',
   };
 
   static const Map<String, String> _csBodies = {

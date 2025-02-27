@@ -1,15 +1,63 @@
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'background_gradient.dart'; // Importujte BackgroundGradient
-import 'language_mapper.dart'; // Importujte LanguageMapper
+import 'background_gradient.dart';
+import 'language_mapper.dart';
+import 'package:firebase_database/firebase_database.dart';
 
-class RegistrationPage extends StatelessWidget {
+class RegistrationPage extends StatefulWidget {
   final String language;
 
   const RegistrationPage({required this.language, super.key});
 
   @override
+  State<RegistrationPage> createState() => _RegistrationPageState();
+}
+
+class _RegistrationPageState extends State<RegistrationPage> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    firstNameController.dispose();
+    lastNameController.dispose();
+    usernameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  void addUser() {
+    if (_formKey.currentState!.validate()) {
+      final databaseReference = FirebaseDatabase.instance.ref();
+
+      // Hash the password using SHA-256
+      var bytes = utf8.encode(passwordController.text);
+      var hashedPassword = sha256.convert(bytes).toString();
+
+      databaseReference
+          .child('users')
+          .push()
+          .set({
+            'first_name': firstNameController.text,
+            'last_name': lastNameController.text,
+            'username': usernameController.text,
+            'email': emailController.text,
+            'password': hashedPassword,
+          })
+          .then((value) => print("User Added"))
+          .catchError((error) => print("Failed to add user: $error"));
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final languageMapper = LanguageMapper(language);
+    final languageMapper = LanguageMapper(widget.language);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -23,80 +71,125 @@ class RegistrationPage extends StatelessWidget {
         child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 20),
-                // First Name Field
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: languageMapper.getTitle('first_name'),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 20),
+                  // First Name Field
+                  TextFormField(
+                    controller: firstNameController,
+                    decoration: InputDecoration(
+                      labelText: languageMapper.getTitle('first_name'),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return languageMapper.getTitle(
+                          'please_enter_first_name',
+                        );
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  // Last Name Field
+                  TextFormField(
+                    controller: lastNameController,
+                    decoration: InputDecoration(
+                      labelText: languageMapper.getTitle('last_name'),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return languageMapper.getTitle(
+                          'please_enter_last_name',
+                        );
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  // Username Field
+                  TextFormField(
+                    controller: usernameController,
+                    decoration: InputDecoration(
+                      labelText: languageMapper.getTitle('username'),
+                      hintText: 'Jan123',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return languageMapper.getTitle('please_enter_username');
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  // Email Field
+                  TextFormField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      labelText: languageMapper.getTitle('email'),
+                      hintText: 'jan@example.com',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return languageMapper.getTitle('please_enter_email');
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  // Password Field
+                  TextFormField(
+                    controller: passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: languageMapper.getTitle('password'),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return languageMapper.getTitle('please_enter_password');
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 30),
+                  // Register Button
+                  ElevatedButton(
+                    onPressed: () {
+                      addUser();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 24,
+                      ),
+                      child: Text(
+                        languageMapper.getTitle('register'),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                // Last Name Field
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: languageMapper.getTitle('last_name'),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                // Username Field
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: languageMapper.getTitle('username'),
-                    hintText: 'Jan123',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                // Email Field
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: languageMapper.getTitle('email'),
-                    hintText: 'jan@example.com',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                // Password Field
-                TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: languageMapper.getTitle('password'),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 30),
-                // Register Button
-                ElevatedButton(
-                  onPressed: () {
-                    // Handle registration action
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 24,
-                    ),
-                    child: Text(
-                      languageMapper.getTitle('register'),
-                      style: const TextStyle(fontSize: 16, color: Colors.white),
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
