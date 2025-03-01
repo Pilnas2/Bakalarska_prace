@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'background_gradient.dart';
-import 'language_mapper.dart';
+import '../background_gradient.dart';
+import '../controllers/language_mapper.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class RegistrationPage extends StatefulWidget {

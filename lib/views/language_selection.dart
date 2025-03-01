@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'introduction.dart';
-import 'background_gradient.dart';
+import '../background_gradient.dart';
 
 class LanguageSelectionPage extends StatelessWidget {
   const LanguageSelectionPage({super.key});

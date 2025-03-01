@@ -1,17 +1,17 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:bakalarska_prace_pilny/background_gradient.dart';
-import 'package:bakalarska_prace_pilny/language_selection.dart';
-import 'package:bakalarska_prace_pilny/level_language.dart';
-import 'package:bakalarska_prace_pilny/registration.dart';
+import 'package:bakalarska_prace_pilny/views/language_selection.dart';
+import 'package:bakalarska_prace_pilny/views/level_language.dart';
+import 'package:bakalarska_prace_pilny/views/registration.dart';
 import 'package:flutter/material.dart';
-import 'language_mapper.dart';
+import 'controllers/language_mapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'introduction.dart';
+import 'views/introduction.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
