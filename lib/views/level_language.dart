@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../background_gradient.dart'; // Importujte BackgroundGradient
+import '../models/background_gradient.dart'; // Importujte BackgroundGradient
 import '../controllers/language_mapper.dart'; // Importujte LanguageMapper
 
 class LevelLanguagePage extends StatelessWidget {
