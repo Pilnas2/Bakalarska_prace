@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'introduction.dart';
-import 'background_gradient.dart'; // Importujte BackgroundGradient
+import 'background_gradient.dart';
 
 class LanguageSelectionPage extends StatelessWidget {
   const LanguageSelectionPage({super.key});
 
-  void _navigateToIntroduction(BuildContext context, String language) {
+  Future<void> _navigateToIntroduction(
+    BuildContext context,
+    String language,
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedLanguage', language);
+    // ignore: use_build_context_synchronously
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (_) => IntroductionPage(language: language)),
     );

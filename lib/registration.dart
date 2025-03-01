@@ -50,8 +50,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
             'email': emailController.text,
             'password': hashedPassword,
           })
-          .then((value) => print("User Added"))
-          .catchError((error) => print("Failed to add user: $error"));
+          .then((value) {
+            // User added successfully
+          })
+          .catchError((error) {
+            return null;
+          });
     }
   }
 
@@ -147,6 +151,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       if (value == null || value.isEmpty) {
                         return languageMapper.getTitle('please_enter_email');
                       }
+                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                        return languageMapper.getTitle('invalid_email');
+                      }
                       return null;
                     },
                   ),
@@ -164,6 +171,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return languageMapper.getTitle('please_enter_password');
+                      }
+                      if (value.length < 6) {
+                        return languageMapper.getTitle('password_too_short');
                       }
                       return null;
                     },

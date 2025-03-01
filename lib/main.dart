@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:bakalarska_prace_pilny/background_gradient.dart';
 import 'package:bakalarska_prace_pilny/language_selection.dart';
 import 'package:bakalarska_prace_pilny/level_language.dart';
@@ -8,15 +10,23 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'introduction.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  final prefs = await SharedPreferences.getInstance();
+  //pro zvolení jazyka stačí nastavit na null
+  final selectedLanguage = prefs.getString('selectedLanguage');
+
+  runApp(MyApp(selectedLanguage: selectedLanguage));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String? selectedLanguage;
+
+  const MyApp({super.key, this.selectedLanguage});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +42,10 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const LanguageSelectionPage(),
+      home:
+          selectedLanguage == null
+              ? const LanguageSelectionPage()
+              : IntroductionPage(language: selectedLanguage!),
     );
   }
 }
@@ -43,12 +56,15 @@ class LoginPage extends StatefulWidget {
   const LoginPage({required this.language, super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
   late TextEditingController usernameController;
   late TextEditingController passwordController;
+
+  get languageMapper => null;
 
   @override
   void initState() {
@@ -78,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
 
       if (event.snapshot.value == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No user found for that username.')),
+          SnackBar(content: Text(languageMapper.getTitle('no_user_found'))),
         );
         return;
       }
@@ -89,9 +105,11 @@ class _LoginPageState extends State<LoginPage> {
 
       // Check if the password matches
       if (userData['password'] != hashedPassword) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Incorrect password.')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(languageMapper.getTitle('incorrect_password')),
+          ),
+        );
         return;
       } else {
         // Navigate to the LevelLanguagePage
@@ -102,9 +120,11 @@ class _LoginPageState extends State<LoginPage> {
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('An error occurred: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${languageMapper.getTitle('error_occurred')}: $e'),
+        ),
+      );
     }
   }
 
