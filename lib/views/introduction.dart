@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'background_gradient.dart'; // Importujte BackgroundGradient
-import 'main.dart'; // Importujte LoginPage
-import 'language_mapper.dart'; // Importujte LanguageMapper
+import '../models/background_gradient.dart'; // Importujte BackgroundGradient
+import '../main.dart'; // Importujte LoginPage
+import '../controllers/language_mapper.dart'; // Importujte LanguageMapper
 
 class IntroductionPage extends StatelessWidget {
   final String language;

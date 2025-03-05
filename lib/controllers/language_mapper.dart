@@ -43,7 +43,17 @@ class LanguageMapper {
     'first_name': 'Jméno',
     'last_name': 'Příjmení',
     'email': 'Email',
-    'select_level': 'Vyberte úroveň',
+    'select_level': 'Vyberte jazykovou úroveň',
+    'please_enter_first_name': 'Prosím zadejte jméno',
+    'please_enter_last_name': 'Prosím zadejte příjmení',
+    'please_enter_username': 'Prosím zadejte uživatelské jméno',
+    'please_enter_email': 'Prosím zadejte email',
+    'please_enter_password': 'Prosím zadejte heslo',
+    'no_user_found': 'Neexustuje žádný uživatel s tímto uživatelským jménem',
+    'incorrect_password': 'Nesprávné heslo',
+    'error_occurred': 'Došlo k chybě',
+    'invalid_email': 'Neplatný email',
+    'password_too_short': 'Heslo je příliš krátké',
   };
 
   static const Map<String, String> _enTitles = {
@@ -60,7 +70,17 @@ class LanguageMapper {
     'first_name': 'First Name',
     'last_name': 'Last Name',
     'email': 'Email',
-    'select_level': 'Select Level',
+    'select_level': 'Select Language Level',
+    'please_enter_first_name': 'Please enter first name',
+    'please_enter_last_name': 'Please enter last name',
+    'please_enter_username': 'Please enter username',
+    'please_enter_email': 'Please enter email',
+    'please_enter_password': 'Please enter password',
+    'no_user_found': 'No user found with this username',
+    'incorrect_password': 'Incorrect password',
+    'error_occurred': 'An error occurred',
+    'invalid_email': 'Invalid email',
+    'password_too_short': 'Password is too short',
   };
 
   static const Map<String, String> _ruTitles = {
@@ -77,7 +97,17 @@ class LanguageMapper {
     'first_name': 'Имя',
     'last_name': 'Фамилия',
     'email': 'Эл. почта',
-    'select_level': 'Выберите уровень',
+    'select_level': 'Выберите уровень языка',
+    'please_enter_first_name': 'Пожалуйста, введите имя',
+    'please_enter_last_name': 'Пожалуйста, введите фамилию',
+    'please_enter_username': 'Пожалуйста, введите имя пользователя',
+    'please_enter_email': 'Пожалуйста, введите адрес электронной почты',
+    'please_enter_password': 'Пожалуйста, введите пароль',
+    'no_user_found': 'Пользователь с таким именем не найден',
+    'incorrect_password': 'Неверный пароль',
+    'error_occurred': 'Произошла ошибка',
+    'invalid_email': 'Неверный адрес электронной почты',
+    'password_too_short': 'Пароль сли',
   };
 
   static const Map<String, String> _csBodies = {
