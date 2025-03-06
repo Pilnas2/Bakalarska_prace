@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/background_gradient.dart'; // Importujte BackgroundGradient
 import '../controllers/language_mapper.dart'; // Importujte LanguageMapper
+import 'topic.dart'; // Importujte TopicsPage
 
 class LevelLanguagePage extends StatelessWidget {
   final String language;
@@ -33,7 +34,13 @@ class LevelLanguagePage extends StatelessWidget {
                   width: 200,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Handle A1 level selection
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => TopicScreen(language_level: 'A1'),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -53,7 +60,13 @@ class LevelLanguagePage extends StatelessWidget {
                   width: 200,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Handle A2 level selection
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => TopicScreen(language_level: 'A2'),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -73,7 +86,13 @@ class LevelLanguagePage extends StatelessWidget {
                   width: 200,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Handle B1 level selection
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => TopicScreen(language_level: 'B1'),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -93,7 +112,13 @@ class LevelLanguagePage extends StatelessWidget {
                   width: 200,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Handle B2 level selection
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => TopicScreen(language_level: 'B2'),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
