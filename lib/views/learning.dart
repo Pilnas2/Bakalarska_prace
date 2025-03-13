@@ -41,6 +41,12 @@ class LearningMenuPage extends StatelessWidget {
                 Icons.chrome_reader_mode,
                 Colors.red,
               ),
+              _buildTile(
+                context,
+                'Test',
+                Icons.fact_check_rounded,
+                Colors.purple,
+              ),
             ],
           ),
         ),
