@@ -44,5 +44,5 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-// filepath: c:\Skola\bakalarska_prace\bakalarska_prace_pilny\.gitignore
-.env
+# Ignore .env file in assets directory
+assets/.env

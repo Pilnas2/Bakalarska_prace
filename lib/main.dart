@@ -6,6 +6,7 @@ import 'package:bakalarska_prace_pilny/views/language_selection.dart';
 import 'package:bakalarska_prace_pilny/views/level_language.dart';
 import 'package:bakalarska_prace_pilny/views/registration.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'controllers/language_mapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -19,7 +20,7 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   //pro zvolení jazyka stačí nastavit na null
   final selectedLanguage = prefs.getString('selectedLanguage');
-
+  await dotenv.load(fileName: "assets/.env");
   runApp(MyApp(selectedLanguage: selectedLanguage));
 }
 
