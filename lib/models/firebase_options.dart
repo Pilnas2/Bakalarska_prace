@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -46,8 +47,8 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBSl_Ql_-SmdZvRW2Nj5_NYe2rSpDa9GWo',
+  static FirebaseOptions web = FirebaseOptions(
+    apiKey: dotenv.env['API_KEY_WEB']!,
     appId: '1:559556940793:web:42c0b39b4adf56a91aa328',
     messagingSenderId: '559556940793',
     projectId: 'bakalarska-prace-pilny',
@@ -56,16 +57,16 @@ class DefaultFirebaseOptions {
     measurementId: 'G-GTC01BNMNF',
   );
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA8QBWPXpyT9BlRxcAymnuzAY6CNwQ62kE',
+  static FirebaseOptions android = FirebaseOptions(
+    apiKey: dotenv.env['API_KEY_ANDROID']!,
     appId: '1:559556940793:android:efe00ccc47b75ab41aa328',
     messagingSenderId: '559556940793',
     projectId: 'bakalarska-prace-pilny',
     storageBucket: 'bakalarska-prace-pilny.firebasestorage.app',
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAeLbEHfW91fXXFBZluMM6GLNvMftphY_A',
+  static FirebaseOptions ios = FirebaseOptions(
+    apiKey: dotenv.env['API_KEY_IOS']!,
     appId: '1:559556940793:ios:da8118099572733a1aa328',
     messagingSenderId: '559556940793',
     projectId: 'bakalarska-prace-pilny',

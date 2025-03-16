@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
       home:
           selectedLanguage == null
               ? const LanguageSelectionPage()
-              : ChatbotPage(),
+              : LoginPage(language: selectedLanguage!),
     );
   }
 }
@@ -63,14 +63,16 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late TextEditingController usernameController;
   late TextEditingController passwordController;
-
-  get languageMapper => null;
+  late LanguageMapper languageMapper;
 
   @override
   void initState() {
     super.initState();
     usernameController = TextEditingController();
     passwordController = TextEditingController();
+    languageMapper = LanguageMapper(
+      widget.language,
+    ); // Initialize languageMapper here
   }
 
   @override
@@ -130,8 +132,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final languageMapper = LanguageMapper(widget.language);
-
     return Scaffold(
       body: BackgroundGradient(
         child: Center(

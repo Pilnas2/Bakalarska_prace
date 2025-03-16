@@ -44,6 +44,7 @@ dependencies:
   encrypt: ^5.0.3
   shared_preferences: ^2.5.2
   audioplayers: ^6.2.0
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
