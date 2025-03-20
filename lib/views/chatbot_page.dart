@@ -131,7 +131,12 @@ class _ChatbotPageState extends State<ChatbotPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.only(
+                left: 8.0,
+                right: 8.0,
+                bottom:
+                    MediaQuery.of(context).viewInsets.bottom == 0 ? 80.0 : 8.0,
+              ),
               child: Row(
                 children: [
                   Expanded(

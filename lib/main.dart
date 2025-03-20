@@ -5,6 +5,7 @@ import 'package:bakalarska_prace_pilny/views/chatbot_page.dart';
 import 'package:bakalarska_prace_pilny/views/language_selection.dart';
 import 'package:bakalarska_prace_pilny/views/level_language.dart';
 import 'package:bakalarska_prace_pilny/views/registration.dart';
+import 'package:bakalarska_prace_pilny/views/vocabulary_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'controllers/language_mapper.dart';
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
       home:
           selectedLanguage == null
               ? const LanguageSelectionPage()
-              : LoginPage(language: selectedLanguage!),
+              : VocabularyPage(),
     );
   }
 }
