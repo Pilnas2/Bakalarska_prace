@@ -110,7 +110,7 @@ class _LearningMenuPageState extends State<LearningMenuPage>
               children: [
                 ChatbotPage(),
                 GrammarLessonPage(),
-                VocabularyPage(),
+                VocabularyPage(topic: widget.topic, level: 'A1'),
                 ListeningPage(),
                 ReadingPage(),
               ],
@@ -209,7 +209,14 @@ class _LearningMenuPageState extends State<LearningMenuPage>
         } else if (title == 'Slovní zásoba') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => VocabularyPage()),
+            MaterialPageRoute(
+              builder:
+                  (context) => VocabularyPage(
+                    topic: widget.topic,
+                    level:
+                        'A1', // Replace 'A1' with the appropriate level if needed
+                  ),
+            ),
           );
         } else if (title == 'Poslech') {
           Navigator.push(

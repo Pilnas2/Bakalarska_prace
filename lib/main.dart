@@ -1,10 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:bakalarska_prace_pilny/models/background_gradient.dart';
-import 'package:bakalarska_prace_pilny/views/chatbot_page.dart';
+//import 'package:bakalarska_prace_pilny/views/chatbot_page.dart';
 import 'package:bakalarska_prace_pilny/views/language_selection.dart';
 import 'package:bakalarska_prace_pilny/views/level_language.dart';
 import 'package:bakalarska_prace_pilny/views/registration.dart';
+import 'package:bakalarska_prace_pilny/views/topic.dart';
 import 'package:bakalarska_prace_pilny/views/vocabulary_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
       home:
           selectedLanguage == null
               ? const LanguageSelectionPage()
-              : VocabularyPage(),
+              : LoginPage(language: selectedLanguage!),
     );
   }
 }
