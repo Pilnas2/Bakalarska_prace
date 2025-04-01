@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class VocabularyPage extends StatefulWidget {
   final String topic;
@@ -86,9 +87,11 @@ class _VocabularyPageState extends State<VocabularyPage> {
                 ],
               ),
             ),
-            SizedBox(height: 10),
-            Expanded(
-              child:
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: PageView(
+                scrollDirection: Axis.horizontal, // Nastaví swipování do stran
+                children: [
                   _phrases.isEmpty
                       ? Center(child: CircularProgressIndicator())
                       : ListView.builder(
@@ -106,12 +109,10 @@ class _VocabularyPageState extends State<VocabularyPage> {
                               ),
                             ),
                             child: Row(
-                              crossAxisAlignment:
-                                  CrossAxisAlignment
-                                      .start, // Zajistí zarovnání nahoru
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Expanded(
-                                  flex: 3, // Můžeš upravit podle potřeby
+                                  flex: 3,
                                   child: Text(
                                     vocabulary["question"]!,
                                     style: TextStyle(
@@ -121,23 +122,18 @@ class _VocabularyPageState extends State<VocabularyPage> {
                                     textAlign: TextAlign.start,
                                   ),
                                 ),
-
                                 Expanded(
-                                  flex: 4, // Odpověď dostane více místa
+                                  flex: 4,
                                   child: Text(
                                     vocabulary["answer"]!,
                                     style: TextStyle(
                                       fontSize: 17,
                                       color: Colors.grey[600],
                                     ),
-                                    overflow:
-                                        TextOverflow
-                                            .ellipsis, // Přidá "..." pokud je text příliš dlouhý
-                                    maxLines: 2, // Omezení na 2 řádky
-                                    softWrap: true, // Umožní zalamování textu
-                                    textAlign:
-                                        TextAlign
-                                            .end, // Align text to the right
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    softWrap: true,
+                                    textAlign: TextAlign.end,
                                   ),
                                 ),
                               ],
@@ -145,6 +141,27 @@ class _VocabularyPageState extends State<VocabularyPage> {
                           );
                         },
                       ),
+                  Center(
+                    child: Text(
+                      "Další stránka",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            Center(
+              child: SmoothPageIndicator(
+                controller: PageController(), // Připojení PageControlleru
+                count: 2, // Počet stránek v PageView
+                effect: WormEffect(
+                  dotColor: Colors.grey,
+                  activeDotColor: Colors.deepOrangeAccent,
+                  dotHeight: 9.0,
+                  dotWidth: 9.0,
+                ),
+              ),
             ),
           ],
         ),
