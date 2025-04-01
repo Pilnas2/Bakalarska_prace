@@ -21,6 +21,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   @override
   void dispose() {
@@ -29,6 +31,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     usernameController.dispose();
     emailController.dispose();
     passwordController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -174,6 +177,31 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       }
                       if (value.length < 6) {
                         return languageMapper.getTitle('password_too_short');
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  // Confirm Password Field
+                  TextFormField(
+                    controller: confirmPasswordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: languageMapper.getTitle('confirm_password'),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return languageMapper.getTitle(
+                          'please_confirm_password',
+                        );
+                      }
+                      if (value != passwordController.text) {
+                        return languageMapper.getTitle(
+                          'passwords_do_not_match',
+                        );
                       }
                       return null;
                     },

@@ -1,5 +1,6 @@
 import 'package:bakalarska_prace_pilny/models/background_gradient.dart';
 import 'package:bakalarska_prace_pilny/views/chatbot_page.dart';
+import 'package:bakalarska_prace_pilny/views/edit_profile_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'grammar_lesson_page.dart';
@@ -85,7 +86,6 @@ class _LearningMenuPageState extends State<LearningMenuPage>
       ),
       bottomNavigationBar: BottomBar(
         fit: StackFit.expand,
-
         borderRadius: BorderRadius.circular(80),
         duration: Duration(seconds: 1),
         showIcon: true,
@@ -111,8 +111,8 @@ class _LearningMenuPageState extends State<LearningMenuPage>
                 ChatbotPage(),
                 GrammarLessonPage(),
                 VocabularyPage(topic: widget.topic, level: 'A1'),
-                ListeningPage(),
-                ReadingPage(),
+                LearningMenuPage(topic: widget.topic),
+                EditProfilePage(),
               ],
             ),
         child: TabBar(

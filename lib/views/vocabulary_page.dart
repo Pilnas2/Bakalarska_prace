@@ -57,7 +57,12 @@ class _VocabularyPageState extends State<VocabularyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Center(child: Text("Slovní zásoba"))),
+      appBar: AppBar(
+        title: Text("Slovní zásoba"),
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        elevation: 0,
+      ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(

@@ -49,11 +49,14 @@ class LanguageMapper {
     'please_enter_username': 'Prosím zadejte uživatelské jméno',
     'please_enter_email': 'Prosím zadejte email',
     'please_enter_password': 'Prosím zadejte heslo',
-    'no_user_found': 'Neexustuje žádný uživatel s tímto uživatelským jménem',
+    'no_user_found': 'Neexistuje žádný uživatel s tímto uživatelským jménem',
     'incorrect_password': 'Nesprávné heslo',
     'error_occurred': 'Došlo k chybě',
     'invalid_email': 'Neplatný email',
     'password_too_short': 'Heslo je příliš krátké',
+    'confirm_password': 'Potvrďte heslo',
+    'passwords_do_not_match': 'Hesla se neshodují',
+    'please_confirm_password': 'Prosím potvrďte heslo',
   };
 
   static const Map<String, String> _enTitles = {
@@ -81,6 +84,9 @@ class LanguageMapper {
     'error_occurred': 'An error occurred',
     'invalid_email': 'Invalid email',
     'password_too_short': 'Password is too short',
+    'confirm_password': 'Confirm Password',
+    'please_confirm_password': 'Please confirm password',
+    'passwords_do_not_match': 'Confirm Password',
   };
 
   static const Map<String, String> _ruTitles = {
@@ -108,6 +114,9 @@ class LanguageMapper {
     'error_occurred': 'Произошла ошибка',
     'invalid_email': 'Неверный адрес электронной почты',
     'password_too_short': 'Пароль сли',
+    'confirm_password': 'Подтвердите пароль',
+    'please_confirm_password': 'Пожалуйста, подтвердите пароль',
+    'passwords_do_not_match': 'Пароли не совпадают',
   };
 
   static const Map<String, String> _csBodies = {
