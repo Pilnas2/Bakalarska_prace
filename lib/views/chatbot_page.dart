@@ -1,5 +1,8 @@
 import 'package:bakalarska_prace_pilny/controllers/Message.dart';
 import 'package:bakalarska_prace_pilny/models/background_gradient.dart';
+import 'package:bakalarska_prace_pilny/models/custom_bottom_nav_bar.dart';
+import 'package:bakalarska_prace_pilny/views/edit_profile_page.dart';
+import 'package:bakalarska_prace_pilny/views/learning.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 // ignore: depend_on_referenced_packages
@@ -7,7 +10,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ChatbotPage extends StatefulWidget {
-  const ChatbotPage({super.key});
+  final String topic; // Add the 'topic' property
+
+  const ChatbotPage({super.key, required this.topic});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -73,6 +78,38 @@ class _ChatbotPageState extends State<ChatbotPage> {
     });
   }
 
+  int _selectedIndex = 1;
+
+  void _onTabChange(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    // Přesměrování na konkrétní stránky
+    if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LearningMenuPage(topic: widget.topic),
+        ), // Pass the topic from ChatbotPage
+      );
+    } else if (index == 1) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChatbotPage(topic: widget.topic),
+        ),
+      );
+    } else if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditProfilePage(topic: widget.topic),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,12 +168,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(
-                left: 8.0,
-                right: 8.0,
-                bottom:
-                    MediaQuery.of(context).viewInsets.bottom == 0 ? 80.0 : 8.0,
-              ),
+              padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
               child: Row(
                 children: [
                   Expanded(
@@ -170,6 +202,10 @@ class _ChatbotPageState extends State<ChatbotPage> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: _selectedIndex,
+        onTabChange: _onTabChange,
       ),
     );
   }

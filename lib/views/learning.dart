@@ -1,7 +1,7 @@
 import 'package:bakalarska_prace_pilny/models/background_gradient.dart';
+import 'package:bakalarska_prace_pilny/models/custom_bottom_nav_bar.dart';
 import 'package:bakalarska_prace_pilny/views/chatbot_page.dart';
 import 'package:bakalarska_prace_pilny/views/edit_profile_page.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'grammar_lesson_page.dart';
 import 'vocabulary_page.dart';
@@ -17,29 +17,37 @@ class LearningMenuPage extends StatefulWidget {
   _LearningMenuPageState createState() => _LearningMenuPageState();
 }
 
-class _LearningMenuPageState extends State<LearningMenuPage>
-    with SingleTickerProviderStateMixin {
-  late TabController tabController;
-  int currentPage = 0;
-  final List<Color> colors = [
-    Colors.red,
-    Colors.green,
-    Colors.blue,
-    Colors.orange,
-    Colors.purple,
-  ];
-  final Color unselectedColor = Colors.pink;
+class _LearningMenuPageState extends State<LearningMenuPage> {
+  int _selectedIndex = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    tabController = TabController(length: 5, vsync: this);
-  }
+  void _onTabChange(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
 
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
+    // Přesměrování na konkrétní stránky
+    if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LearningMenuPage(topic: widget.topic),
+        ),
+      );
+    } else if (index == 1) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChatbotPage(topic: widget.topic),
+        ),
+      );
+    } else if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditProfilePage(topic: widget.topic),
+        ),
+      );
+    }
   }
 
   @override
@@ -83,6 +91,10 @@ class _LearningMenuPageState extends State<LearningMenuPage>
           ),
         ),
       ),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: _selectedIndex,
+        onTabChange: _onTabChange,
+      ),
     );
   }
 
@@ -104,11 +116,7 @@ class _LearningMenuPageState extends State<LearningMenuPage>
             context,
             MaterialPageRoute(
               builder:
-                  (context) => VocabularyPage(
-                    topic: widget.topic,
-                    level:
-                        'A1', // Replace 'A1' with the appropriate level if needed
-                  ),
+                  (context) => VocabularyPage(topic: widget.topic, level: 'A1'),
             ),
           );
         } else if (title == 'Poslech') {
@@ -121,8 +129,6 @@ class _LearningMenuPageState extends State<LearningMenuPage>
             context,
             MaterialPageRoute(builder: (context) => ReadingPage()),
           );
-        } else {
-          // Přidat navigaci na konkrétní stránku pro ostatní dlaždice
         }
       },
       child: Card(

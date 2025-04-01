@@ -2,13 +2,18 @@
 
 import 'package:bakalarska_prace_pilny/controllers/user_session.dart';
 import 'package:bakalarska_prace_pilny/models/background_gradient.dart';
+import 'package:bakalarska_prace_pilny/models/custom_bottom_nav_bar.dart';
+import 'package:bakalarska_prace_pilny/views/chatbot_page.dart';
+import 'package:bakalarska_prace_pilny/views/learning.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 
 class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({super.key});
+  final String topic;
+
+  const EditProfilePage({super.key, required this.topic});
 
   @override
   _EditProfilePageState createState() => _EditProfilePageState();
@@ -133,6 +138,38 @@ class _EditProfilePageState extends State<EditProfilePage> {
     }
   }
 
+  int _selectedIndex = 3;
+
+  void _onTabChange(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    // Přesměrování na konkrétní stránky
+    if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LearningMenuPage(topic: widget.topic),
+        ),
+      );
+    } else if (index == 1) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChatbotPage(topic: widget.topic),
+        ),
+      );
+    } else if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditProfilePage(topic: widget.topic),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,7 +194,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       decoration: InputDecoration(labelText: 'Jméno'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your first name';
+                          return 'Prosím zadejte vaše jméno';
                         }
                         return null;
                       },
@@ -168,7 +205,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       decoration: InputDecoration(labelText: 'Příjmení'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your last name';
+                          return 'Prosím zadejte vaše přijmení';
                         }
                         return null;
                       },
@@ -180,10 +217,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
+                          return 'Prosím zadejte váš email';
                         }
                         if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                          return 'Please enter a valid email address';
+                          return 'Prosím zadejte platnou emailovou adresu';
                         }
                         return null;
                       },
@@ -196,7 +233,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your username';
+                          return 'Prosím zadejte vaše uživatelské jméno';
                         }
                         return null;
                       },
@@ -222,10 +259,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       obscureText: !_isPasswordVisible,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
+                          return 'Prosím zadejte vaše heslo';
                         }
-                        if (value.length < 1) {
-                          return 'Password must be at least 6 characters long';
+                        if (value.length < 6) {
+                          return 'Heslo musí být alespoň 6 znaků dlouhé';
                         }
                         return null;
                       },
@@ -333,6 +370,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
             },
           ),
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: _selectedIndex,
+        onTabChange: _onTabChange,
       ),
     );
   }
