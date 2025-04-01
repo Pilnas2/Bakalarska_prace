@@ -45,8 +45,7 @@ dependencies:
   shared_preferences: ^2.5.2
   audioplayers: ^6.2.0
   flutter_dotenv: ^5.2.1
-  flutter_floating_bottom_bar: ^1.2.1+1
-
+  google_nav_bar: ^5.0.7
 dev_dependencies:
   flutter_test:
     sdk: flutter

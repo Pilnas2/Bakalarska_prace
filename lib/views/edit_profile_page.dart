@@ -1,11 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:bakalarska_prace_pilny/controllers/user_session.dart';
 import 'package:bakalarska_prace_pilny/models/background_gradient.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'dart:convert'; // Pro utf8 a base64
-import 'package:crypto/crypto.dart'; // Pro hashování
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
@@ -62,6 +62,74 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Chyba při načítání dat uživatele: $e')),
       );
+    }
+  }
+
+  Future<void> controlDb() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        DatabaseReference databaseRef = FirebaseDatabase.instance.ref('users');
+
+        // Najdi aktuálního uživatele podle přihlášeného uživatelského jména
+        DatabaseEvent event =
+            await databaseRef
+                .orderByChild('username')
+                .equalTo(userSession.loggedInUsername)
+                .once();
+
+        if (event.snapshot.value != null) {
+          Map<dynamic, dynamic> users =
+              event.snapshot.value as Map<dynamic, dynamic>;
+
+          // Předpokládáme, že uživatelské jméno je unikátní, získáme první klíč
+          String userKey = users.keys.first;
+
+          // Zkontroluj, zda nové uživatelské jméno již existuje
+          if (_usernameController.text != userSession.loggedInUsername) {
+            DatabaseEvent usernameCheckEvent =
+                await databaseRef
+                    .orderByChild('username')
+                    .equalTo(_usernameController.text)
+                    .once();
+
+            if (usernameCheckEvent.snapshot.value != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Uživatelské jméno již existuje.')),
+              );
+              return;
+            }
+          }
+
+          // Hashování hesla pomocí SHA-256
+          String hashedPassword =
+              sha256.convert(utf8.encode(_passwordController.text)).toString();
+
+          // Aktualizuj data uživatele
+          await databaseRef.child(userKey).update({
+            'first_name': _firstNameController.text,
+            'last_name': _lastNameController.text,
+            'email': _emailController.text,
+            'username': _usernameController.text,
+            'password': hashedPassword, // Uložíme zahashované heslo
+          });
+
+          // Aktualizuj session pouze po úspěšném uložení
+          userSession.loggedInUsername = _usernameController.text;
+          userSession.loggedInPassword = _passwordController.text;
+
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Profil úspěšně editován!')));
+        } else {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Uživatel nebyl nalezen.')));
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Chyba při aktualizaci dat: $e')),
+        );
+      }
     }
   }
 

@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Learn Czech',
       theme: ThemeData(
+        visualDensity: VisualDensity.compact,
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xffFF65C2)),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
