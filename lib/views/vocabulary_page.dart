@@ -14,7 +14,9 @@ class VocabularyPage extends StatefulWidget {
 
 class _VocabularyPageState extends State<VocabularyPage> {
   late DatabaseReference _database;
+  late PageController _pageController;
   String imageUrl = '';
+  List<Map<String, String>> _phrases = [];
 
   @override
   void initState() {
@@ -23,6 +25,13 @@ class _VocabularyPageState extends State<VocabularyPage> {
       'topics/${widget.level}/${widget.topic}/Vocabulary',
     );
     fetchVocabulary();
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose(); // Uvolnění PageControlleru
+    super.dispose();
   }
 
   Future<void> fetchVocabulary() async {
@@ -33,15 +42,17 @@ class _VocabularyPageState extends State<VocabularyPage> {
 
     List<dynamic> data = snapshot.value as List<dynamic>;
     List<Map<String, String>> phrases =
-        data.map((entry) {
+        data.map((item) {
+          final valueMap = item as Map<dynamic, dynamic>;
           return {
-            "question": entry["question"]?.toString() ?? "Neznámá otázka",
-            "answer": entry["answer"]?.toString() ?? "Neznámá odpověď",
+            "question": valueMap["question"]?.toString() ?? "Neznámá otázka",
+            "answer": valueMap["answer"]?.toString() ?? "Neznámá odpověď",
+            "hint": valueMap["hint"]?.toString() ?? "",
           };
         }).toList();
 
     final imageSnapshot =
-        await FirebaseDatabase.instance.ref('images/Seznamujeme se').get();
+        await FirebaseDatabase.instance.ref('images/${widget.topic}').get();
     if (imageSnapshot.exists) {
       setState(() {
         imageUrl = imageSnapshot.value.toString();
@@ -53,11 +64,10 @@ class _VocabularyPageState extends State<VocabularyPage> {
     });
   }
 
-  List<Map<String, String>> _phrases = [];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text("Slovní zásoba"),
         backgroundColor: Colors.transparent,
@@ -90,8 +100,10 @@ class _VocabularyPageState extends State<VocabularyPage> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.6,
               child: PageView(
+                controller: _pageController, // Použití PageControlleru
                 scrollDirection: Axis.horizontal, // Nastaví swipování do stran
                 children: [
+                  // První stránka
                   _phrases.isEmpty
                       ? Center(child: CircularProgressIndicator())
                       : ListView.builder(
@@ -141,19 +153,98 @@ class _VocabularyPageState extends State<VocabularyPage> {
                           );
                         },
                       ),
-                  Center(
-                    child: Text(
-                      "Další stránka",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
+                  // Druhá stránka - Test s inputem
+                  _phrases.isEmpty
+                      ? Center(child: CircularProgressIndicator())
+                      : ListView.builder(
+                        itemCount: _phrases.length,
+                        itemBuilder: (context, index) {
+                          var testPhrase = _phrases[index];
+                          TextEditingController controller =
+                              TextEditingController();
+
+                          return Container(
+                            padding: EdgeInsets.all(12.0),
+                            child: Column(
+                              crossAxisAlignment:
+                                  index % 2 == 0
+                                      ? CrossAxisAlignment.start
+                                      : CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  testPhrase["question"]!,
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width *
+                                      0.6, // Nastavení šířky na 3/4 obrazovky
+                                  child: TextField(
+                                    textAlign:
+                                        index % 2 == 0
+                                            ? TextAlign.start
+                                            : TextAlign.end,
+                                    controller: controller,
+                                    decoration: InputDecoration(
+                                      hintText: testPhrase["hint"] ?? "",
+                                    ),
+                                    onChanged: (value) {
+                                      // Uložení odpovědi uživatele
+                                      testPhrase["userAnswer"] = value;
+                                    },
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    FocusScope.of(context).unfocus();
+                                    String correctAnswer =
+                                        testPhrase["answer"]!;
+                                    String userAnswer =
+                                        testPhrase["userAnswer"] ?? "";
+
+                                    if (userAnswer.trim().toLowerCase() ==
+                                        correctAnswer.trim().toLowerCase()) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text("Správná odpověď!"),
+                                          backgroundColor: Colors.green,
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            "Špatná odpověď. Zkuste to znovu.",
+                                          ),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: Text("Ověřit"),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                 ],
               ),
             ),
             SizedBox(height: 20),
             Center(
               child: SmoothPageIndicator(
-                controller: PageController(), // Připojení PageControlleru
+                controller:
+                    _pageController, // Připojení stejného PageControlleru
                 count: 2, // Počet stránek v PageView
                 effect: WormEffect(
                   dotColor: Colors.grey,
@@ -165,6 +256,50 @@ class _VocabularyPageState extends State<VocabularyPage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class QuestionTile extends StatelessWidget {
+  final String emoji;
+  final String question;
+  final String hint;
+
+  const QuestionTile({
+    super.key,
+    required this.emoji,
+    required this.question,
+    required this.hint,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(emoji, style: TextStyle(fontSize: 24)),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  question,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8),
+          TextField(
+            decoration: InputDecoration(
+              hintText: hint,
+              border: OutlineInputBorder(),
+            ),
+          ),
+        ],
       ),
     );
   }
