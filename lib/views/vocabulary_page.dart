@@ -240,7 +240,6 @@ class _VocabularyPageState extends State<VocabularyPage> {
                                           content: Text("Správná odpověď!"),
                                           backgroundColor: Colors.green,
                                         ),
-                                        d,
                                       );
                                       // Uložení správné odpovědi a nastavení stavu na správný
                                       setState(() {
