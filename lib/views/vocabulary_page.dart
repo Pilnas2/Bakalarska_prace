@@ -161,7 +161,15 @@ class _VocabularyPageState extends State<VocabularyPage> {
                         itemBuilder: (context, index) {
                           var testPhrase = _phrases[index];
                           TextEditingController controller =
-                              TextEditingController();
+                              TextEditingController(
+                                text:
+                                    testPhrase["userAnswer"] ??
+                                    "", // Předvyplnění odpovědi, pokud existuje
+                              );
+
+                          bool isCorrect =
+                              testPhrase["isCorrect"] ==
+                              "true"; // Kontrola správnosti
 
                           return Container(
                             padding: EdgeInsets.all(12.0),
@@ -181,8 +189,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
                                 SizedBox(height: 8),
                                 SizedBox(
                                   width:
-                                      MediaQuery.of(context).size.width *
-                                      0.6, // Nastavení šířky na 3/4 obrazovky
+                                      MediaQuery.of(context).size.width * 0.6,
                                   child: TextField(
                                     textAlign:
                                         index % 2 == 0
@@ -191,6 +198,24 @@ class _VocabularyPageState extends State<VocabularyPage> {
                                     controller: controller,
                                     decoration: InputDecoration(
                                       hintText: testPhrase["hint"] ?? "",
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color:
+                                              isCorrect
+                                                  ? Colors.green
+                                                  : Colors.grey,
+                                          width: 2.0,
+                                        ),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color:
+                                              isCorrect
+                                                  ? Colors.green
+                                                  : Colors.blue, // Změna barvy
+                                          width: 2.0,
+                                        ),
+                                      ),
                                     ),
                                     onChanged: (value) {
                                       // Uložení odpovědi uživatele
@@ -204,10 +229,9 @@ class _VocabularyPageState extends State<VocabularyPage> {
                                     FocusScope.of(context).unfocus();
                                     String correctAnswer =
                                         testPhrase["answer"]!;
-                                    String userAnswer =
-                                        testPhrase["userAnswer"] ?? "";
+                                    String userAnswer = controller.text.trim();
 
-                                    if (userAnswer.trim().toLowerCase() ==
+                                    if (userAnswer.toLowerCase() ==
                                         correctAnswer.trim().toLowerCase()) {
                                       ScaffoldMessenger.of(
                                         context,
@@ -216,7 +240,15 @@ class _VocabularyPageState extends State<VocabularyPage> {
                                           content: Text("Správná odpověď!"),
                                           backgroundColor: Colors.green,
                                         ),
+                                        d,
                                       );
+                                      // Uložení správné odpovědi a nastavení stavu na správný
+                                      setState(() {
+                                        testPhrase["userAnswer"] =
+                                            testPhrase["answer"]!;
+                                        testPhrase["isCorrect"] =
+                                            "true"; // Nastavení správnosti
+                                      });
                                     } else {
                                       ScaffoldMessenger.of(
                                         context,
@@ -228,6 +260,10 @@ class _VocabularyPageState extends State<VocabularyPage> {
                                           backgroundColor: Colors.red,
                                         ),
                                       );
+                                      // Nastavení stavu na nesprávný
+                                      setState(() {
+                                        testPhrase["isCorrect"] = "false";
+                                      });
                                     }
                                   },
                                   child: Text("Ověřit"),
