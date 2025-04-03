@@ -10,8 +10,9 @@ import 'reading_page.dart';
 
 class LearningMenuPage extends StatefulWidget {
   final String topic;
+  final String level;
 
-  const LearningMenuPage({super.key, required this.topic});
+  const LearningMenuPage({super.key, required this.topic, required this.level});
 
   @override
   _LearningMenuPageState createState() => _LearningMenuPageState();
@@ -30,7 +31,9 @@ class _LearningMenuPageState extends State<LearningMenuPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => LearningMenuPage(topic: widget.topic),
+          builder:
+              (context) =>
+                  LearningMenuPage(topic: widget.topic, level: widget.level),
         ),
       );
     } else if (index == 1) {
@@ -109,7 +112,11 @@ class _LearningMenuPageState extends State<LearningMenuPage> {
         if (title == 'Gramatika') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => GrammarLessonPage()),
+            MaterialPageRoute(
+              builder:
+                  (context) =>
+                      GrammarLessonPage(topic: widget.topic, level: 'A1'),
+            ),
           );
         } else if (title == 'Slovní zásoba') {
           Navigator.push(

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfilePage extends StatefulWidget {
   final String topic;
@@ -29,13 +30,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // State for password visibility
   bool _isPasswordVisible = false;
+  String? _selectedLevel;
 
   @override
   void initState() {
     super.initState();
     _loadUserData();
+    _loadSelectedLevel();
+  }
+
+  Future<void> _loadSelectedLevel() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedLevel = prefs.getString(
+        'selectedLevelLanguage',
+      ); // Načtení hodnoty
+    });
   }
 
   Future<void> _loadUserData() async {
@@ -150,7 +161,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => LearningMenuPage(topic: widget.topic),
+          builder:
+              (context) =>
+                  LearningMenuPage(topic: widget.topic, level: _selectedLevel!),
         ),
       );
     } else if (index == 1) {

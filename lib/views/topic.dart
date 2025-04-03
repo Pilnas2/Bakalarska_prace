@@ -92,7 +92,10 @@ class _TopicScreenState extends State<TopicScreen> {
                               context,
                               MaterialPageRoute(
                                 builder:
-                                    (context) => LearningMenuPage(topic: topic),
+                                    (context) => LearningMenuPage(
+                                      topic: topic,
+                                      level: widget.language_level,
+                                    ),
                               ),
                             );
                           },

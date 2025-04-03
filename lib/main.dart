@@ -3,6 +3,7 @@
 import 'package:bakalarska_prace_pilny/controllers/user_session.dart';
 import 'package:bakalarska_prace_pilny/models/background_gradient.dart';
 import 'package:bakalarska_prace_pilny/views/edit_profile_page.dart';
+import 'package:bakalarska_prace_pilny/views/grammar_lesson_page.dart';
 import 'package:bakalarska_prace_pilny/views/introduction.dart';
 //import 'package:bakalarska_prace_pilny/views/chatbot_page.dart';
 import 'package:bakalarska_prace_pilny/views/language_selection.dart';
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
       home:
           selectedLanguage == null
               ? const LanguageSelectionPage()
-              : VocabularyPage(topic: 'Seznamujeme se', level: 'A1'),
+              : GrammarLessonPage(topic: 'Seznamujeme se', level: 'A1'),
     );
   }
 }

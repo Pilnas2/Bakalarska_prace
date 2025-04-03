@@ -9,6 +9,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class ChatbotPage extends StatefulWidget {
   final String topic; // Add the 'topic' property
 
@@ -24,6 +26,22 @@ class _ChatbotPageState extends State<ChatbotPage> {
   final List<Message> _messages = [];
   final ScrollController _scrollController = ScrollController();
   final String apiKey = dotenv.env['API_KEY_AI']!;
+  String? _selectedLevel; // Přidání proměnné pro jazykový level
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSelectedLevel();
+  }
+
+  Future<void> _loadSelectedLevel() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedLevel = prefs.getString(
+        'selectedLevelLanguage',
+      ); // Načtení hodnoty
+    });
+  }
 
   Future<void> _sendMessage(String message) async {
     if (message.isEmpty) return;
@@ -90,7 +108,9 @@ class _ChatbotPageState extends State<ChatbotPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => LearningMenuPage(topic: widget.topic),
+          builder:
+              (context) =>
+                  LearningMenuPage(topic: widget.topic, level: _selectedLevel!),
         ), // Pass the topic from ChatbotPage
       );
     } else if (index == 1) {

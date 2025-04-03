@@ -92,7 +92,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
                   ),
                   SizedBox(height: 10),
                   imageUrl.isNotEmpty
-                      ? Image.network(imageUrl, width: 200, height: 100)
+                      ? Image.network(imageUrl, width: 200, height: 200)
                       : CircularProgressIndicator(),
                 ],
               ),
