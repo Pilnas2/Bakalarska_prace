@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
       home:
           selectedLanguage == null
               ? const LanguageSelectionPage()
-              : GrammarLessonPage(topic: 'Seznamujeme se', level: 'A1'),
+              : VocabularyPage(topic: 'Seznamujeme se', level: 'A1'),
     );
   }
 }

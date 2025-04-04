@@ -98,7 +98,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.6,
+              height: MediaQuery.of(context).size.height / 2,
               child: PageView(
                 controller: _pageController, // Použití PageControlleru
                 scrollDirection: Axis.horizontal, // Nastaví swipování do stran
@@ -188,8 +188,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
                                 ),
                                 SizedBox(height: 8),
                                 SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.6,
+                                  width: MediaQuery.of(context).size.width / 2,
                                   child: TextField(
                                     textAlign:
                                         index % 2 == 0
