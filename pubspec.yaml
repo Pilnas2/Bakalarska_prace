@@ -47,6 +47,7 @@ dependencies:
   flutter_dotenv: ^5.2.1
   google_nav_bar: ^5.0.7
   smooth_page_indicator: ^1.2.1
+  firebase_storage: ^12.4.5
 dev_dependencies:
   flutter_test:
     sdk: flutter

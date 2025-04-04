@@ -123,13 +123,18 @@ class _LearningMenuPageState extends State<LearningMenuPage> {
             context,
             MaterialPageRoute(
               builder:
-                  (context) => VocabularyPage(topic: widget.topic, level: 'A1'),
+                  (context) =>
+                      VocabularyPage(topic: widget.topic, level: widget.level),
             ),
           );
         } else if (title == 'Poslech') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ListeningPage()),
+            MaterialPageRoute(
+              builder:
+                  (context) =>
+                      ListeningPage(topic: widget.topic, level: widget.level),
+            ),
           );
         } else if (title == 'Čtení') {
           Navigator.push(
