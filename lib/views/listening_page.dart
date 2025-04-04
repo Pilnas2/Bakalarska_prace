@@ -21,6 +21,9 @@ class _ListeningPageState extends State<ListeningPage> {
   final AudioPlayer audioPlayer = AudioPlayer();
   List<Map<String, String>> _sentences = [];
   bool isLoading = true;
+  List<String> userAnswers = []; // Seznam pro odpovědi uživatele
+  List<bool?> answerStates =
+      []; // Stav odpovědí (null = neověřeno, true = správně, false = špatně)
 
   @override
   void initState() {
@@ -28,7 +31,7 @@ class _ListeningPageState extends State<ListeningPage> {
     _database = FirebaseDatabase.instance.ref(
       'topics/${widget.level}/${widget.topic}/Listening',
     );
-    _fetchSentences();
+    _fetchSentences(); // Načtení dat
     _pageController = PageController();
   }
 
@@ -65,6 +68,11 @@ class _ListeningPageState extends State<ListeningPage> {
 
     setState(() {
       _sentences = sentences;
+      userAnswers = List.filled(_sentences.length, ""); // Inicializace odpovědí
+      answerStates = List.filled(
+        _sentences.length,
+        null,
+      ); // Inicializace stavů odpovědí
       isLoading = false;
     });
   }
@@ -77,6 +85,7 @@ class _ListeningPageState extends State<ListeningPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text("Poslech")),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -135,31 +144,69 @@ class _ListeningPageState extends State<ListeningPage> {
                   ),
                   // Nová stránka pro testování odpovědí
                   Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Testování odpovědí",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                    child: ListView.builder(
+                      itemCount: _sentences.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          elevation: 3,
+                          margin: EdgeInsets.symmetric(
+                            vertical: 8.0,
+                            horizontal: 16.0,
                           ),
-                        ),
-                        SizedBox(height: 20),
-                        TextField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: "Vaše odpověď",
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(Icons.play_arrow),
+                                      onPressed: () async {
+                                        final audioUrl = await _getAudioUrl(
+                                          _sentences[index]['audio']!,
+                                        );
+                                        audioPlayer.play(UrlSource(audioUrl));
+                                      },
+                                    ),
+                                    SizedBox(width: 10),
+                                    Expanded(
+                                      child: TextField(
+                                        onChanged: (value) {
+                                          userAnswers[index] =
+                                              value; // Uložení odpovědi
+                                        },
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  answerStates[index] == null
+                                                      ? Colors.grey
+                                                      : (answerStates[index] ==
+                                                              true
+                                                          ? Colors.green
+                                                          : Colors.red),
+                                            ),
+                                          ),
+                                          labelText: "Vaše odpověď",
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    _verifySingleAnswer(
+                                      index,
+                                    ); // Ověření konkrétní odpovědi
+                                  },
+                                  child: Text("Ověřit"),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: () {
-                            // Logika pro ověření odpovědi
-                          },
-                          child: Text("Odeslat"),
-                        ),
-                      ],
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -181,6 +228,31 @@ class _ListeningPageState extends State<ListeningPage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _verifySingleAnswer(int index) {
+    bool isCorrect =
+        userAnswers[index].trim().toLowerCase() ==
+        _sentences[index]['text']!.trim().toLowerCase();
+
+    setState(() {
+      answerStates[index] = isCorrect; // Aktualizace stavu odpovědi
+    });
+
+    // Zobrazení výsledku pomocí Snackbar nad klávesnicí
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating, // Nastavení plovoucího Snackbaru
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom, // Nad klávesnicí
+        ),
+        content: Text(
+          isCorrect ? "Odpověď je správná!" : "Odpověď je špatná. ",
+        ),
+        backgroundColor: isCorrect ? Colors.green : Colors.red,
+        duration: Duration(seconds: 3),
       ),
     );
   }
