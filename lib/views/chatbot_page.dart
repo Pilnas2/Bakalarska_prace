@@ -1,13 +1,20 @@
 import 'package:bakalarska_prace_pilny/controllers/Message.dart';
 import 'package:bakalarska_prace_pilny/models/background_gradient.dart';
+import 'package:bakalarska_prace_pilny/models/custom_bottom_nav_bar.dart';
+import 'package:bakalarska_prace_pilny/views/edit_profile_page.dart';
+import 'package:bakalarska_prace_pilny/views/learning.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class ChatbotPage extends StatefulWidget {
-  const ChatbotPage({super.key});
+  final String topic; // Add the 'topic' property
+
+  const ChatbotPage({super.key, required this.topic});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -19,6 +26,22 @@ class _ChatbotPageState extends State<ChatbotPage> {
   final List<Message> _messages = [];
   final ScrollController _scrollController = ScrollController();
   final String apiKey = dotenv.env['API_KEY_AI']!;
+  String? _selectedLevel; // Přidání proměnné pro jazykový level
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSelectedLevel();
+  }
+
+  Future<void> _loadSelectedLevel() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedLevel = prefs.getString(
+        'selectedLevelLanguage',
+      ); // Načtení hodnoty
+    });
+  }
 
   Future<void> _sendMessage(String message) async {
     if (message.isEmpty) return;
@@ -71,6 +94,40 @@ class _ChatbotPageState extends State<ChatbotPage> {
         curve: Curves.easeOut,
       );
     });
+  }
+
+  int _selectedIndex = 1;
+
+  void _onTabChange(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    // Přesměrování na konkrétní stránky
+    if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder:
+              (context) =>
+                  LearningMenuPage(topic: widget.topic, level: _selectedLevel!),
+        ), // Pass the topic from ChatbotPage
+      );
+    } else if (index == 1) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChatbotPage(topic: widget.topic),
+        ),
+      );
+    } else if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditProfilePage(topic: widget.topic),
+        ),
+      );
+    }
   }
 
   @override
@@ -131,12 +188,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(
-                left: 8.0,
-                right: 8.0,
-                bottom:
-                    MediaQuery.of(context).viewInsets.bottom == 0 ? 80.0 : 8.0,
-              ),
+              padding: EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
               child: Row(
                 children: [
                   Expanded(
@@ -170,6 +222,10 @@ class _ChatbotPageState extends State<ChatbotPage> {
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: _selectedIndex,
+        onTabChange: _onTabChange,
       ),
     );
   }

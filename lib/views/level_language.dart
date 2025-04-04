@@ -1,12 +1,20 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
-import '../models/background_gradient.dart'; // Importujte BackgroundGradient
-import '../controllers/language_mapper.dart'; // Importujte LanguageMapper
-import 'topic.dart'; // Importujte TopicsPage
+import 'package:shared_preferences/shared_preferences.dart';
+import '../models/background_gradient.dart';
+import '../controllers/language_mapper.dart';
+import 'topic.dart';
 
 class LevelLanguagePage extends StatelessWidget {
   final String language;
 
   const LevelLanguagePage({required this.language, super.key});
+
+  Future<void> _saveSelectedLevel(String level) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedLevelLanguage', level);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +41,8 @@ class LevelLanguagePage extends StatelessWidget {
                 SizedBox(
                   width: 200,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      await _saveSelectedLevel('A1');
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -59,7 +68,8 @@ class LevelLanguagePage extends StatelessWidget {
                 SizedBox(
                   width: 200,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      await _saveSelectedLevel('A2');
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -85,7 +95,8 @@ class LevelLanguagePage extends StatelessWidget {
                 SizedBox(
                   width: 200,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      await _saveSelectedLevel('B1');
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -111,7 +122,8 @@ class LevelLanguagePage extends StatelessWidget {
                 SizedBox(
                   width: 200,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      await _saveSelectedLevel('B2');
                       Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -1,10 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:bakalarska_prace_pilny/controllers/user_session.dart';
 import 'package:bakalarska_prace_pilny/models/background_gradient.dart';
-import 'package:bakalarska_prace_pilny/views/chatbot_page.dart';
+import 'package:bakalarska_prace_pilny/views/edit_profile_page.dart';
+import 'package:bakalarska_prace_pilny/views/grammar_lesson_page.dart';
+import 'package:bakalarska_prace_pilny/views/introduction.dart';
+//import 'package:bakalarska_prace_pilny/views/chatbot_page.dart';
 import 'package:bakalarska_prace_pilny/views/language_selection.dart';
+import 'package:bakalarska_prace_pilny/views/learning.dart';
 import 'package:bakalarska_prace_pilny/views/level_language.dart';
 import 'package:bakalarska_prace_pilny/views/registration.dart';
+import 'package:bakalarska_prace_pilny/views/topic.dart';
 import 'package:bakalarska_prace_pilny/views/vocabulary_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -36,6 +42,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Learn Czech',
       theme: ThemeData(
+        visualDensity: VisualDensity.compact,
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xffFF65C2)),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -47,7 +54,7 @@ class MyApp extends StatelessWidget {
       home:
           selectedLanguage == null
               ? const LanguageSelectionPage()
-              : VocabularyPage(),
+              : VocabularyPage(topic: 'Seznamujeme se', level: 'A1'),
     );
   }
 }
@@ -66,6 +73,8 @@ class _LoginPageState extends State<LoginPage> {
   late TextEditingController usernameController;
   late TextEditingController passwordController;
   late LanguageMapper languageMapper;
+  late String loggedInUsername;
+  late String loggedInPassword;
 
   @override
   void initState() {
@@ -116,7 +125,9 @@ class _LoginPageState extends State<LoginPage> {
         );
         return;
       } else {
-        // Navigate to the LevelLanguagePage
+        userSession.loggedInUsername = usernameController.text;
+        userSession.loggedInPassword = passwordController.text;
+
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => LevelLanguagePage(language: widget.language),

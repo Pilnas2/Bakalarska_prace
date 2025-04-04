@@ -1,45 +1,56 @@
 import 'package:bakalarska_prace_pilny/models/background_gradient.dart';
+import 'package:bakalarska_prace_pilny/models/custom_bottom_nav_bar.dart';
 import 'package:bakalarska_prace_pilny/views/chatbot_page.dart';
-import 'package:flutter/gestures.dart';
+import 'package:bakalarska_prace_pilny/views/edit_profile_page.dart';
 import 'package:flutter/material.dart';
 import 'grammar_lesson_page.dart';
 import 'vocabulary_page.dart';
 import 'listening_page.dart';
 import 'reading_page.dart';
-import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
 
 class LearningMenuPage extends StatefulWidget {
   final String topic;
+  final String level;
 
-  const LearningMenuPage({super.key, required this.topic});
+  const LearningMenuPage({super.key, required this.topic, required this.level});
 
   @override
   _LearningMenuPageState createState() => _LearningMenuPageState();
 }
 
-class _LearningMenuPageState extends State<LearningMenuPage>
-    with SingleTickerProviderStateMixin {
-  late TabController tabController;
-  int currentPage = 0;
-  final List<Color> colors = [
-    Colors.red,
-    Colors.green,
-    Colors.blue,
-    Colors.orange,
-    Colors.purple,
-  ];
-  final Color unselectedColor = Colors.pink;
+class _LearningMenuPageState extends State<LearningMenuPage> {
+  int _selectedIndex = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    tabController = TabController(length: 5, vsync: this);
-  }
+  void _onTabChange(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
 
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
+    // Přesměrování na konkrétní stránky
+    if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder:
+              (context) =>
+                  LearningMenuPage(topic: widget.topic, level: widget.level),
+        ),
+      );
+    } else if (index == 1) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ChatbotPage(topic: widget.topic),
+        ),
+      );
+    } else if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditProfilePage(topic: widget.topic),
+        ),
+      );
+    }
   }
 
   @override
@@ -83,112 +94,9 @@ class _LearningMenuPageState extends State<LearningMenuPage>
           ),
         ),
       ),
-      bottomNavigationBar: BottomBar(
-        fit: StackFit.expand,
-
-        borderRadius: BorderRadius.circular(80),
-        duration: Duration(seconds: 1),
-        showIcon: true,
-        width: MediaQuery.of(context).size.width * 0.8,
-        barColor: Colors.blueGrey,
-        start: 2,
-        end: 0,
-        offset: 15,
-        barAlignment: Alignment.bottomCenter,
-        iconHeight: 35,
-        iconWidth: 35,
-        reverse: false,
-        hideOnScroll: false,
-        scrollOpposite: false,
-        onBottomBarHidden: () {},
-        onBottomBarShown: () {},
-        body:
-            (context, controller) => TabBarView(
-              controller: tabController,
-              dragStartBehavior: DragStartBehavior.down,
-              physics: const BouncingScrollPhysics(),
-              children: [
-                ChatbotPage(),
-                GrammarLessonPage(),
-                VocabularyPage(),
-                ListeningPage(),
-                ReadingPage(),
-              ],
-            ),
-        child: TabBar(
-          indicatorPadding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
-          controller: tabController,
-          indicator: UnderlineTabIndicator(
-            borderSide: BorderSide(
-              color:
-                  currentPage == 0
-                      ? colors[0]
-                      : currentPage == 1
-                      ? colors[1]
-                      : currentPage == 2
-                      ? colors[2]
-                      : currentPage == 3
-                      ? colors[3]
-                      : currentPage == 4
-                      ? colors[4]
-                      : unselectedColor,
-              width: 4,
-            ),
-            insets: EdgeInsets.fromLTRB(16, 0, 16, 8),
-          ),
-          tabs: [
-            SizedBox(
-              height: 55,
-              width: 40,
-              child: Center(
-                child: Icon(
-                  Icons.home,
-                  color: currentPage == 0 ? colors[0] : unselectedColor,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 55,
-              width: 40,
-              child: Center(
-                child: Icon(
-                  Icons.search,
-                  color: currentPage == 1 ? colors[1] : unselectedColor,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 55,
-              width: 40,
-              child: Center(
-                child: Icon(
-                  Icons.add,
-                  color: currentPage == 2 ? colors[2] : unselectedColor,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 55,
-              width: 40,
-              child: Center(
-                child: Icon(
-                  Icons.favorite,
-                  color: currentPage == 3 ? colors[3] : unselectedColor,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 55,
-              width: 40,
-              child: Center(
-                child: Icon(
-                  Icons.settings,
-                  color: currentPage == 4 ? colors[4] : unselectedColor,
-                ),
-              ),
-            ),
-          ],
-        ),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: _selectedIndex,
+        onTabChange: _onTabChange,
       ),
     );
   }
@@ -204,12 +112,19 @@ class _LearningMenuPageState extends State<LearningMenuPage>
         if (title == 'Gramatika') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => GrammarLessonPage()),
+            MaterialPageRoute(
+              builder:
+                  (context) =>
+                      GrammarLessonPage(topic: widget.topic, level: 'A1'),
+            ),
           );
         } else if (title == 'Slovní zásoba') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => VocabularyPage()),
+            MaterialPageRoute(
+              builder:
+                  (context) => VocabularyPage(topic: widget.topic, level: 'A1'),
+            ),
           );
         } else if (title == 'Poslech') {
           Navigator.push(
@@ -221,8 +136,6 @@ class _LearningMenuPageState extends State<LearningMenuPage>
             context,
             MaterialPageRoute(builder: (context) => ReadingPage()),
           );
-        } else {
-          // Přidat navigaci na konkrétní stránku pro ostatní dlaždice
         }
       },
       child: Card(
