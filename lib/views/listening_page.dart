@@ -86,7 +86,12 @@ class _ListeningPageState extends State<ListeningPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: Text("Poslech")),
+      appBar: AppBar(
+        title: Text("Poslech"),
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        elevation: 0,
+      ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(

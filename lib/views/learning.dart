@@ -139,7 +139,11 @@ class _LearningMenuPageState extends State<LearningMenuPage> {
         } else if (title == 'Čtení') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ReadingPage()),
+            MaterialPageRoute(
+              builder:
+                  (context) =>
+                      ReadingPage(topic: widget.topic, level: widget.level),
+            ),
           );
         }
       },
