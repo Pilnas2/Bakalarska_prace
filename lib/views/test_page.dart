@@ -51,6 +51,79 @@ class _TestPageState extends State<TestPage> {
     });
   }
 
+  void _evaluateAnswers() {
+    int correctAnswers = 0;
+    List<int> incorrectIndexes = [];
+
+    for (int i = 0; i < _questions.length; i++) {
+      if (selectedOptions[i] == _questions[i]['answer']) {
+        correctAnswers++;
+      } else {
+        incorrectIndexes.add(i); // Uložení indexu špatné odpovědi
+      }
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Výsledek testu"),
+          content: Text(
+            "Správné odpovědi: $correctAnswers z ${_questions.length}",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _showIncorrectAnswers(incorrectIndexes); // Zobrazení chyb
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showIncorrectAnswers(List<int> incorrectIndexes) {
+    if (incorrectIndexes.isEmpty) {
+      return; // Pokud nejsou žádné chyby, nic nezobrazuj
+    }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Chybné odpovědi"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children:
+                incorrectIndexes.map((index) {
+                  final question = _questions[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      '${index + 1}. ${question['question']}\n'
+                      'Správná odpověď: ${question['answer']}',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  );
+                }).toList(),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Zavřít"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +151,6 @@ class _TestPageState extends State<TestPage> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 20),
                     Expanded(
                       child: ListView.builder(
@@ -121,6 +193,16 @@ class _TestPageState extends State<TestPage> {
                           );
                         },
                       ),
+                    ),
+                    Row(
+                      mainAxisAlignment:
+                          MainAxisAlignment.end, // Zarovnání doprava
+                      children: [
+                        ElevatedButton(
+                          onPressed: _evaluateAnswers,
+                          child: const Text("Vyhodnotit test"),
+                        ),
+                      ],
                     ),
                   ],
                 ),

@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
       home:
           selectedLanguage == null
               ? const LanguageSelectionPage()
-              : TestPage(topic: 'Seznamujeme se', level: 'A1'), // Default page
+              : LoginPage(language: selectedLanguage!), // Default page
     );
   }
 }
