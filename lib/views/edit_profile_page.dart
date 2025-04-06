@@ -5,6 +5,7 @@ import 'package:bakalarska_prace_pilny/models/background_gradient.dart';
 import 'package:bakalarska_prace_pilny/models/custom_bottom_nav_bar.dart';
 import 'package:bakalarska_prace_pilny/views/chatbot_page.dart';
 import 'package:bakalarska_prace_pilny/views/learning.dart';
+import 'package:bakalarska_prace_pilny/views/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'dart:convert';
@@ -178,6 +179,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
         context,
         MaterialPageRoute(
           builder: (context) => EditProfilePage(topic: widget.topic),
+        ),
+      );
+    } else if (index == 3) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SettingsPage(topic: widget.topic),
         ),
       );
     }

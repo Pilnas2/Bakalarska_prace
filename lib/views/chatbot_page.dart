@@ -3,6 +3,7 @@ import 'package:bakalarska_prace_pilny/models/background_gradient.dart';
 import 'package:bakalarska_prace_pilny/models/custom_bottom_nav_bar.dart';
 import 'package:bakalarska_prace_pilny/views/edit_profile_page.dart';
 import 'package:bakalarska_prace_pilny/views/learning.dart';
+import 'package:bakalarska_prace_pilny/views/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 // ignore: depend_on_referenced_packages
@@ -26,7 +27,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
   final List<Message> _messages = [];
   final ScrollController _scrollController = ScrollController();
   final String apiKey = dotenv.env['API_KEY_AI']!;
-  String? _selectedLevel; // Přidání proměnné pro jazykový level
+  String? _selectedLevel;
 
   @override
   void initState() {
@@ -125,6 +126,13 @@ class _ChatbotPageState extends State<ChatbotPage> {
         context,
         MaterialPageRoute(
           builder: (context) => EditProfilePage(topic: widget.topic),
+        ),
+      );
+    } else if (index == 3) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SettingsPage(topic: widget.topic),
         ),
       );
     }

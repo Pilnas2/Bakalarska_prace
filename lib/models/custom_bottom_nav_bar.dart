@@ -39,6 +39,7 @@ class CustomBottomNavBar extends StatelessWidget {
               GButton(icon: Icons.menu_book),
               GButton(icon: Icons.chat),
               GButton(icon: Icons.person),
+              GButton(icon: Icons.settings),
             ],
             selectedIndex: selectedIndex,
             onTabChange: onTabChange,

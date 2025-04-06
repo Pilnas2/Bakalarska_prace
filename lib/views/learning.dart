@@ -2,6 +2,7 @@ import 'package:bakalarska_prace_pilny/models/background_gradient.dart';
 import 'package:bakalarska_prace_pilny/models/custom_bottom_nav_bar.dart';
 import 'package:bakalarska_prace_pilny/views/chatbot_page.dart';
 import 'package:bakalarska_prace_pilny/views/edit_profile_page.dart';
+import 'package:bakalarska_prace_pilny/views/settings_page.dart';
 import 'package:bakalarska_prace_pilny/views/test_page.dart';
 import 'package:flutter/material.dart';
 import 'grammar_lesson_page.dart';
@@ -49,6 +50,13 @@ class _LearningMenuPageState extends State<LearningMenuPage> {
         context,
         MaterialPageRoute(
           builder: (context) => EditProfilePage(topic: widget.topic),
+        ),
+      );
+    } else if (index == 3) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SettingsPage(topic: widget.topic),
         ),
       );
     }

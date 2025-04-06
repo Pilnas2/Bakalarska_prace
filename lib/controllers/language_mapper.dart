@@ -5,7 +5,7 @@ class LanguageMapper {
 
   String getTitle(String key) {
     switch (language) {
-      case 'cs':
+      case 'cz':
         return _csTitles[key] ?? '';
       case 'en':
         return _enTitles[key] ?? '';
@@ -18,7 +18,7 @@ class LanguageMapper {
 
   String getBody(String key) {
     switch (language) {
-      case 'cs':
+      case 'cz':
         return _csBodies[key] ?? '';
       case 'en':
         return _enBodies[key] ?? '';
