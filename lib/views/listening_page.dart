@@ -1,4 +1,3 @@
-import 'package:bakalarska_prace_pilny/models/background_gradient.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_storage/firebase_storage.dart';

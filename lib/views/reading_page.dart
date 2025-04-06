@@ -1,4 +1,3 @@
-import 'package:bakalarska_prace_pilny/models/background_gradient.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 

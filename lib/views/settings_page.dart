@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:bakalarska_prace_pilny/main.dart';
 import 'package:bakalarska_prace_pilny/models/background_gradient.dart';
 import 'package:bakalarska_prace_pilny/models/custom_bottom_nav_bar.dart';

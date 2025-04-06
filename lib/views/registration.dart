@@ -1,9 +1,14 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
+import 'package:bakalarska_prace_pilny/controllers/user_session.dart';
+import 'package:bakalarska_prace_pilny/views/level_language.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import '../models/background_gradient.dart';
 import '../controllers/language_mapper.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegistrationPage extends StatefulWidget {
   final String language;
@@ -35,9 +40,24 @@ class _RegistrationPageState extends State<RegistrationPage> {
     super.dispose();
   }
 
-  void addUser() {
+  void addUser() async {
     if (_formKey.currentState!.validate()) {
       final databaseReference = FirebaseDatabase.instance.ref();
+
+      // Zkontrolujte, zda uživatelské jméno již existuje
+      final snapshot =
+          await databaseReference
+              .child('users')
+              .orderByChild('username')
+              .equalTo(usernameController.text)
+              .get();
+
+      if (snapshot.exists) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Uživatelské jméno již existuje.')),
+        );
+        return;
+      }
 
       // Hash the password using SHA-256
       var bytes = utf8.encode(passwordController.text);
@@ -53,11 +73,30 @@ class _RegistrationPageState extends State<RegistrationPage> {
             'email': emailController.text,
             'password': hashedPassword,
           })
-          .then((value) {
-            // User added successfully
+          .then((value) async {
+            userSession.loggedInUsername = usernameController.text;
+            userSession.loggedInPassword = passwordController.text;
+
+            final prefs = await SharedPreferences.getInstance();
+
+            final selectedLanguage = prefs.getString('selectedLanguage');
+
+            if (context.mounted) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) =>
+                          LevelLanguagePage(language: selectedLanguage!),
+                ),
+              );
+            }
           })
           .catchError((error) {
-            return null;
+            // Handle error
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Chyba při registraci uživatele: $error')),
+            );
           });
     }
   }
@@ -67,11 +106,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
     final languageMapper = LanguageMapper(widget.language);
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: false,
       appBar: AppBar(
         title: Text(languageMapper.getTitle('registration')),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        flexibleSpace: BackgroundGradient(child: Container()),
         elevation: 0,
       ),
       body: BackgroundGradient(
