@@ -24,6 +24,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +33,10 @@ void main() async {
   //pro zvolení jazyka stačí nastavit na null
   final selectedLanguage = prefs.getString('selectedLanguage');
   await dotenv.load(fileName: "assets/.env");
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(MyApp(selectedLanguage: selectedLanguage));
 }
 

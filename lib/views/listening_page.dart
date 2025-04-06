@@ -1,3 +1,4 @@
+import 'package:bakalarska_prace_pilny/models/background_gradient.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -88,7 +89,7 @@ class _ListeningPageState extends State<ListeningPage> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text("Poslech"),
-        backgroundColor: Colors.transparent,
+        flexibleSpace: BackgroundGradient(child: Container()),
         centerTitle: true,
         elevation: 0,
       ),

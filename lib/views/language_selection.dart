@@ -34,7 +34,7 @@ class LanguageSelectionPage extends StatelessWidget {
               ),
               const SizedBox(height: 50),
               ElevatedButton(
-                onPressed: () => _navigateToIntroduction(context, 'cs'),
+                onPressed: () => _navigateToIntroduction(context, 'cz'),
                 child: const Text('Česky'),
               ),
               const SizedBox(height: 20),

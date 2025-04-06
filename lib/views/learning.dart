@@ -69,7 +69,7 @@ class _LearningMenuPageState extends State<LearningMenuPage> {
       appBar: AppBar(
         title: Text(widget.topic),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        flexibleSpace: BackgroundGradient(child: Container()),
       ),
       body: BackgroundGradient(
         child: Padding(

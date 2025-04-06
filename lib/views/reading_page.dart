@@ -1,3 +1,4 @@
+import 'package:bakalarska_prace_pilny/models/background_gradient.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -49,7 +50,6 @@ class _ReadingPageState extends State<ReadingPage> {
       _phrases = phrases;
     });
 
-    // Fetch questions from 'topics/${widget.level}/${widget.topic}/Reading/test'
     final questionsSnapshot =
         await FirebaseDatabase.instance
             .ref('topics/${widget.level}/${widget.topic}/ReadingTest')
@@ -68,7 +68,6 @@ class _ReadingPageState extends State<ReadingPage> {
 
       setState(() {
         _questions = questions;
-        // Inicializace seznamů na základě délky otázek
         _userAnswers = List.filled(_questions.length, "");
         _isAnswerCorrect = List.filled(_questions.length, false);
       });
@@ -85,13 +84,12 @@ class _ReadingPageState extends State<ReadingPage> {
 
   void _checkAnswer(int index, String value) {
     setState(() {
-      _userAnswers[index] = value; // Uložit odpověď
+      _userAnswers[index] = value;
       _isAnswerCorrect[index] =
           value.trim().toLowerCase() ==
-          _questions[index]["answer"]!.trim().toLowerCase(); // Porovnat odpověď
+          _questions[index]["answer"]!.trim().toLowerCase();
     });
 
-    // Zobrazit Snackbar s výsledkem
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -109,7 +107,7 @@ class _ReadingPageState extends State<ReadingPage> {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text("Čtení"),
-        backgroundColor: Colors.transparent,
+        flexibleSpace: BackgroundGradient(child: Container()),
         centerTitle: true,
         elevation: 0,
       ),
