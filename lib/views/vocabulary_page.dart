@@ -66,6 +66,8 @@ class _VocabularyPageState extends State<VocabularyPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -81,23 +83,24 @@ class _VocabularyPageState extends State<VocabularyPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
-                  child: Column(
-                    children: [
-                      Text(
-                        widget.topic.toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.deepOrangeAccent,
+                if (!isKeyboardVisible) // Skryje obrázek, pokud je klávesnice otevřená
+                  Center(
+                    child: Column(
+                      children: [
+                        Text(
+                          widget.topic.toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.deepOrangeAccent,
+                          ),
                         ),
-                      ),
-                      imageUrl.isNotEmpty
-                          ? Image.network(imageUrl, width: 200, height: 200)
-                          : CircularProgressIndicator(),
-                    ],
+                        imageUrl.isNotEmpty
+                            ? Image.network(imageUrl, width: 200, height: 200)
+                            : CircularProgressIndicator(),
+                      ],
+                    ),
                   ),
-                ),
                 SizedBox(
                   height:
                       MediaQuery.of(context).size.height / 2 -
