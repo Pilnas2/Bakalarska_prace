@@ -107,174 +107,177 @@ class _ReadingPageState extends State<ReadingPage> {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text("Čtení"),
-        flexibleSpace: BackgroundGradient(child: Container()),
+        backgroundColor: Colors.transparent,
         centerTitle: true,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
+      body: Column(
+        children: [
+          Center(
+            child: Text(
+              widget.topic.toUpperCase(),
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.deepOrangeAccent,
+              ),
+            ),
+          ),
+          SizedBox(height: 10),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      widget.topic.toUpperCase(),
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.deepOrangeAccent,
+                    if (_phrases.isEmpty)
+                      Center(child: CircularProgressIndicator())
+                    else
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: _phrases.length,
+                        itemBuilder: (context, index) {
+                          final phrase = _phrases[index];
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        phrase["question"] ?? "Neznámá otázka",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                        softWrap: true,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Text(
+                                        phrase["answer"] ?? "Neznámá odpověď",
+                                        style: TextStyle(fontSize: 16),
+                                        softWrap: true,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                if (phrase["hint"] != null &&
+                                    phrase["hint"]!.isNotEmpty)
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4.0),
+                                    child: Text(
+                                      phrase["hint"]!,
+                                      style: TextStyle(
+                                        fontStyle: FontStyle.italic,
+                                        color: Colors.grey,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    Divider(),
+                    Center(
+                      child: Text(
+                        "Odpovězte na otázky k textu:",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
                       ),
                     ),
-                    SizedBox(height: 10),
-                  ],
-                ),
-              ),
-              if (_phrases.isEmpty)
-                Center(child: CircularProgressIndicator())
-              else
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: _phrases.length,
-                  itemBuilder: (context, index) {
-                    final phrase = _phrases[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: _questions.length,
+                      itemBuilder: (context, index) {
+                        final questions = _questions[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(
-                                flex: 1,
-                                child: Text(
-                                  phrase["question"] ?? "Neznámá otázka",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                  softWrap: true,
+                              Text(
+                                questions["question"]!,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
                                 ),
                               ),
-                              Expanded(
-                                flex: 3,
-                                child: Text(
-                                  phrase["answer"] ?? "Neznámá odpověď",
-                                  style: TextStyle(fontSize: 16),
-                                  softWrap: true,
-                                ),
+                              SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextField(
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _userAnswers[index] =
+                                              value; // Uložit odpověď
+                                        });
+                                      },
+                                      decoration: InputDecoration(
+                                        hintText: questions["hint"]!,
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color:
+                                                _isAnswerCorrect[index]
+                                                    ? Colors.green
+                                                    : Colors.grey,
+                                          ),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color:
+                                                _isAnswerCorrect[index]
+                                                    ? Colors.green
+                                                    : Colors.blue,
+                                          ),
+                                        ),
+                                      ),
+                                      controller: TextEditingController(
+                                          text: _userAnswers[index],
+                                        )
+                                        ..selection =
+                                            TextSelection.fromPosition(
+                                              TextPosition(
+                                                offset:
+                                                    _userAnswers[index].length,
+                                              ),
+                                            ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      _checkAnswer(index, _userAnswers[index]);
+                                    },
+                                    child: Text("Zkontrolovat"),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                          if (phrase["hint"] != null &&
-                              phrase["hint"]!.isNotEmpty)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 4.0),
-                              child: Text(
-                                phrase["hint"]!,
-                                style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  color: Colors.grey,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              Divider(),
-              Center(
-                child: Text(
-                  "Odpovězte na otázky k textu:",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-              ),
-
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: _questions.length,
-                itemBuilder: (context, index) {
-                  final questions = _questions[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          questions["question"]!,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                onChanged: (value) {
-                                  setState(() {
-                                    _userAnswers[index] =
-                                        value; // Uložit odpověď
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                  hintText: questions["hint"]!,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color:
-                                          _isAnswerCorrect[index]
-                                              ? Colors.green
-                                              : Colors.grey,
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color:
-                                          _isAnswerCorrect[index]
-                                              ? Colors.green
-                                              : Colors.blue,
-                                    ),
-                                  ),
-                                ),
-                                controller: TextEditingController(
-                                    text: _userAnswers[index],
-                                  )
-                                  ..selection = TextSelection.fromPosition(
-                                    TextPosition(
-                                      offset: _userAnswers[index].length,
-                                    ),
-                                  ),
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            ElevatedButton(
-                              onPressed: () {
-                                _checkAnswer(index, _userAnswers[index]);
-                              },
-                              child: Text("Zkontrolovat"),
-                            ),
-                          ],
-                        ),
-                      ],
+                        );
+                      },
                     ),
-                  );
-                },
+                  ],
+                ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

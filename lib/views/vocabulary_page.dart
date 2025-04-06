@@ -74,222 +74,228 @@ class _VocabularyPageState extends State<VocabularyPage> {
         centerTitle: true,
         elevation: 0,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Column(
-                children: [
-                  Text(
-                    widget.topic.toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.deepOrangeAccent,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        widget.topic.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.deepOrangeAccent,
+                        ),
+                      ),
+                      imageUrl.isNotEmpty
+                          ? Image.network(imageUrl, width: 200, height: 200)
+                          : CircularProgressIndicator(),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height:
+                      MediaQuery.of(context).size.height / 2 -
+                      MediaQuery.of(context).size.height * 0.1,
+                  child: PageView(
+                    controller: _pageController,
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      _phrases.isEmpty
+                          ? Center(child: CircularProgressIndicator())
+                          : ListView.builder(
+                            itemCount: _phrases.length,
+                            itemBuilder: (context, index) {
+                              var vocabulary = _phrases[index];
+                              return Container(
+                                padding: EdgeInsets.all(6.0),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: Colors.grey,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      flex: 3,
+                                      child: Text(
+                                        vocabulary["question"]!,
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 4,
+                                      child: Text(
+                                        vocabulary["answer"]!,
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          color: Colors.grey[600],
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        softWrap: true,
+                                        textAlign: TextAlign.end,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                      _phrases.isEmpty
+                          ? Center(child: CircularProgressIndicator())
+                          : ListView.builder(
+                            itemCount: _phrases.length,
+                            itemBuilder: (context, index) {
+                              var testPhrase = _phrases[index];
+                              TextEditingController controller =
+                                  TextEditingController(
+                                    text: testPhrase["userAnswer"] ?? "",
+                                  );
+
+                              bool isCorrect =
+                                  testPhrase["isCorrect"] == "true";
+
+                              return Container(
+                                padding: EdgeInsets.all(12.0),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      index % 2 == 0
+                                          ? CrossAxisAlignment.start
+                                          : CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      testPhrase["question"]!,
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height: 8),
+                                    SizedBox(
+                                      width: constraints.maxWidth / 2,
+                                      child: TextField(
+                                        textAlign:
+                                            index % 2 == 0
+                                                ? TextAlign.start
+                                                : TextAlign.end,
+                                        controller: controller,
+                                        decoration: InputDecoration(
+                                          hintText: testPhrase["hint"] ?? "",
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  isCorrect
+                                                      ? Colors.green
+                                                      : Colors.grey,
+                                              width: 2.0,
+                                            ),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  isCorrect
+                                                      ? Colors.green
+                                                      : Colors.blue,
+                                              width: 2.0,
+                                            ),
+                                          ),
+                                        ),
+                                        onChanged: (value) {
+                                          testPhrase["userAnswer"] = value;
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(height: 8),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        FocusScope.of(context).unfocus();
+                                        String correctAnswer =
+                                            testPhrase["answer"]!;
+                                        String userAnswer =
+                                            controller.text.trim();
+
+                                        if (userAnswer.toLowerCase() ==
+                                            correctAnswer
+                                                .trim()
+                                                .toLowerCase()) {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            SnackBar(
+                                              content: Text("Správná odpověď!"),
+                                              backgroundColor: Colors.green,
+                                            ),
+                                          );
+                                          setState(() {
+                                            testPhrase["userAnswer"] =
+                                                testPhrase["answer"]!;
+                                            testPhrase["isCorrect"] = "true";
+                                          });
+                                        } else {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                "Špatná odpověď. Zkuste to znovu.",
+                                              ),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          );
+                                          setState(() {
+                                            testPhrase["isCorrect"] = "false";
+                                          });
+                                        }
+                                      },
+                                      child: Text("Ověřit"),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height:
+                      MediaQuery.of(context).size.height *
+                      0.03, // Dynamická výška SmoothPageIndicator
+                  child: Center(
+                    child: SmoothPageIndicator(
+                      controller: _pageController,
+                      count: 2,
+                      effect: WormEffect(
+                        dotColor: Colors.grey,
+                        activeDotColor: Colors.deepOrangeAccent,
+                        dotHeight:
+                            MediaQuery.of(context).size.height *
+                            0.01, // Dynamická výška teček
+                        dotWidth:
+                            MediaQuery.of(context).size.height *
+                            0.01, // Dynamická šířka teček
+                      ),
                     ),
                   ),
-                  SizedBox(height: 10),
-                  imageUrl.isNotEmpty
-                      ? Image.network(imageUrl, width: 200, height: 200)
-                      : CircularProgressIndicator(),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 2,
-              child: PageView(
-                controller: _pageController, // Použití PageControlleru
-                scrollDirection: Axis.horizontal, // Nastaví swipování do stran
-                children: [
-                  // První stránka
-                  _phrases.isEmpty
-                      ? Center(child: CircularProgressIndicator())
-                      : ListView.builder(
-                        itemCount: _phrases.length,
-                        itemBuilder: (context, index) {
-                          var vocabulary = _phrases[index];
-                          return Container(
-                            padding: EdgeInsets.all(12.0),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.grey,
-                                  width: 1.0,
-                                ),
-                              ),
-                            ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  flex: 3,
-                                  child: Text(
-                                    vocabulary["question"]!,
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 4,
-                                  child: Text(
-                                    vocabulary["answer"]!,
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      color: Colors.grey[600],
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    softWrap: true,
-                                    textAlign: TextAlign.end,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                  // Druhá stránka - Test s inputem
-                  _phrases.isEmpty
-                      ? Center(child: CircularProgressIndicator())
-                      : ListView.builder(
-                        itemCount: _phrases.length,
-                        itemBuilder: (context, index) {
-                          var testPhrase = _phrases[index];
-                          TextEditingController controller =
-                              TextEditingController(
-                                text:
-                                    testPhrase["userAnswer"] ??
-                                    "", // Předvyplnění odpovědi, pokud existuje
-                              );
-
-                          bool isCorrect =
-                              testPhrase["isCorrect"] ==
-                              "true"; // Kontrola správnosti
-
-                          return Container(
-                            padding: EdgeInsets.all(12.0),
-                            child: Column(
-                              crossAxisAlignment:
-                                  index % 2 == 0
-                                      ? CrossAxisAlignment.start
-                                      : CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  testPhrase["question"]!,
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width / 2,
-                                  child: TextField(
-                                    textAlign:
-                                        index % 2 == 0
-                                            ? TextAlign.start
-                                            : TextAlign.end,
-                                    controller: controller,
-                                    decoration: InputDecoration(
-                                      hintText: testPhrase["hint"] ?? "",
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color:
-                                              isCorrect
-                                                  ? Colors.green
-                                                  : Colors.grey,
-                                          width: 2.0,
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color:
-                                              isCorrect
-                                                  ? Colors.green
-                                                  : Colors.blue, // Změna barvy
-                                          width: 2.0,
-                                        ),
-                                      ),
-                                    ),
-                                    onChanged: (value) {
-                                      // Uložení odpovědi uživatele
-                                      testPhrase["userAnswer"] = value;
-                                    },
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    FocusScope.of(context).unfocus();
-                                    String correctAnswer =
-                                        testPhrase["answer"]!;
-                                    String userAnswer = controller.text.trim();
-
-                                    if (userAnswer.toLowerCase() ==
-                                        correctAnswer.trim().toLowerCase()) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Text("Správná odpověď!"),
-                                          backgroundColor: Colors.green,
-                                        ),
-                                      );
-                                      // Uložení správné odpovědi a nastavení stavu na správný
-                                      setState(() {
-                                        testPhrase["userAnswer"] =
-                                            testPhrase["answer"]!;
-                                        testPhrase["isCorrect"] =
-                                            "true"; // Nastavení správnosti
-                                      });
-                                    } else {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            "Špatná odpověď. Zkuste to znovu.",
-                                          ),
-                                          backgroundColor: Colors.red,
-                                        ),
-                                      );
-                                      // Nastavení stavu na nesprávný
-                                      setState(() {
-                                        testPhrase["isCorrect"] = "false";
-                                      });
-                                    }
-                                  },
-                                  child: Text("Ověřit"),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            Center(
-              child: SmoothPageIndicator(
-                controller:
-                    _pageController, // Připojení stejného PageControlleru
-                count: 2, // Počet stránek v PageView
-                effect: WormEffect(
-                  dotColor: Colors.grey,
-                  activeDotColor: Colors.deepOrangeAccent,
-                  dotHeight: 9.0,
-                  dotWidth: 9.0,
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

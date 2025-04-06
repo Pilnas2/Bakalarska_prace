@@ -22,9 +22,8 @@ class _ListeningPageState extends State<ListeningPage> {
   final AudioPlayer audioPlayer = AudioPlayer();
   List<Map<String, String>> _sentences = [];
   bool isLoading = true;
-  List<String> userAnswers = []; // Seznam pro odpovědi uživatele
-  List<bool?> answerStates =
-      []; // Stav odpovědí (null = neověřeno, true = správně, false = špatně)
+  List<String> userAnswers = [];
+  List<bool?> answerStates = [];
 
   @override
   void initState() {
@@ -38,7 +37,7 @@ class _ListeningPageState extends State<ListeningPage> {
 
   @override
   void dispose() {
-    _pageController.dispose(); // Uvolnění PageControlleru
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -89,7 +88,7 @@ class _ListeningPageState extends State<ListeningPage> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text("Poslech"),
-        flexibleSpace: BackgroundGradient(child: Container()),
+        backgroundColor: Colors.transparent,
         centerTitle: true,
         elevation: 0,
       ),
@@ -117,7 +116,9 @@ class _ListeningPageState extends State<ListeningPage> {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height / 2,
+              height:
+                  MediaQuery.of(context).size.height / 2 -
+                  MediaQuery.of(context).size.height * 0.1,
               child: PageView(
                 controller: _pageController, // Použití PageControlleru
                 scrollDirection: Axis.horizontal, // Nastaví swipování do stran
@@ -218,17 +219,24 @@ class _ListeningPageState extends State<ListeningPage> {
                 ],
               ),
             ),
-            SizedBox(height: 20),
-            Center(
-              child: SmoothPageIndicator(
-                controller:
-                    _pageController, // Připojení stejného PageControlleru
-                count: 2, // Počet stránek v PageView
-                effect: WormEffect(
-                  dotColor: Colors.grey,
-                  activeDotColor: Colors.deepOrangeAccent,
-                  dotHeight: 9.0,
-                  dotWidth: 9.0,
+            SizedBox(
+              height:
+                  MediaQuery.of(context).size.height *
+                  0.03, // Dynamická výška SmoothPageIndicator
+              child: Center(
+                child: SmoothPageIndicator(
+                  controller: _pageController,
+                  count: 2,
+                  effect: WormEffect(
+                    dotColor: Colors.grey,
+                    activeDotColor: Colors.deepOrangeAccent,
+                    dotHeight:
+                        MediaQuery.of(context).size.height *
+                        0.01, // Dynamická výška teček
+                    dotWidth:
+                        MediaQuery.of(context).size.height *
+                        0.01, // Dynamická šířka teček
+                  ),
                 ),
               ),
             ),
