@@ -19,7 +19,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  int _selectedIndex = 0;
   String? _selectedLevel;
   String? _selectedLanguage;
   String? _appVersion;
@@ -102,6 +101,8 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
     );
   }
+
+  int _selectedIndex = 3;
 
   void _onTabChange(int index) {
     setState(() {

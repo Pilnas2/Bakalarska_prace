@@ -150,7 +150,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     }
   }
 
-  int _selectedIndex = 3;
+  int _selectedIndex = 2;
 
   void _onTabChange(int index) {
     setState(() {

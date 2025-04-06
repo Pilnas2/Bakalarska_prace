@@ -144,12 +144,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: const Text('Komunikační asistent'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        centerTitle: true,
         backgroundColor: Colors.transparent,
       ),
       body: BackgroundGradient(
