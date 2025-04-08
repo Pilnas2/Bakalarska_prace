@@ -102,9 +102,7 @@ class _VocabularyPageState extends State<VocabularyPage> {
                     ),
                   ),
                 SizedBox(
-                  height:
-                      MediaQuery.of(context).size.height / 2 -
-                      MediaQuery.of(context).size.height * 0.1,
+                  height: MediaQuery.of(context).size.height / 2,
                   child: PageView(
                     controller: _pageController,
                     scrollDirection: Axis.horizontal,

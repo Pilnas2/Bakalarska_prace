@@ -16,6 +16,7 @@ class CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity, // Nastaví šířku na celou obrazovku
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -25,27 +26,24 @@ class CustomBottomNavBar extends StatelessWidget {
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: GNav(
-              rippleColor: Colors.grey[300]!,
-              hoverColor: Colors.grey[100]!,
-              gap: 8,
-              activeColor: Colors.black,
-              iconSize: 24,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              duration: Duration(milliseconds: 400),
-              tabBackgroundColor: Colors.grey[100]!,
-              color: Colors.black,
-              tabs: [
-                GButton(icon: Icons.menu_book, text: 'Učení'),
-                GButton(icon: Icons.chat, text: 'Chatbot'),
-                GButton(icon: Icons.person, text: 'Profil'),
-                GButton(icon: Icons.settings, text: 'Nastavení'),
-              ],
-              selectedIndex: selectedIndex,
-              onTabChange: onTabChange,
-            ),
+          child: GNav(
+            rippleColor: Colors.grey[300]!,
+            hoverColor: Colors.grey[100]!,
+            gap: 8,
+            activeColor: Colors.black,
+            iconSize: 24,
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            duration: Duration(milliseconds: 400),
+            tabBackgroundColor: Colors.grey[100]!,
+            color: Colors.black,
+            tabs: [
+              GButton(icon: Icons.menu_book, text: 'Učení'),
+              GButton(icon: Icons.chat, text: 'Chatbot'),
+              GButton(icon: Icons.person, text: 'Profil'),
+              GButton(icon: Icons.settings, text: 'Nastavení'),
+            ],
+            selectedIndex: selectedIndex,
+            onTabChange: onTabChange,
           ),
         ),
       ),

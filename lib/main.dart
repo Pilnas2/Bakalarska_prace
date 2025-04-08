@@ -2,20 +2,9 @@
 
 import 'package:bakalarska_prace_pilny/controllers/user_session.dart';
 import 'package:bakalarska_prace_pilny/models/background_gradient.dart';
-import 'package:bakalarska_prace_pilny/views/edit_profile_page.dart';
-import 'package:bakalarska_prace_pilny/views/grammar_lesson_page.dart';
-import 'package:bakalarska_prace_pilny/views/introduction.dart';
-//import 'package:bakalarska_prace_pilny/views/chatbot_page.dart';
 import 'package:bakalarska_prace_pilny/views/language_selection.dart';
-import 'package:bakalarska_prace_pilny/views/learning.dart';
 import 'package:bakalarska_prace_pilny/views/level_language.dart';
-import 'package:bakalarska_prace_pilny/views/listening_page.dart';
-import 'package:bakalarska_prace_pilny/views/reading_page.dart';
 import 'package:bakalarska_prace_pilny/views/registration.dart';
-import 'package:bakalarska_prace_pilny/views/settings_page.dart';
-import 'package:bakalarska_prace_pilny/views/test_page.dart';
-import 'package:bakalarska_prace_pilny/views/topic.dart';
-import 'package:bakalarska_prace_pilny/views/vocabulary_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'controllers/language_mapper.dart';

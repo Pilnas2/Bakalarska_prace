@@ -118,9 +118,7 @@ class _ListeningPageState extends State<ListeningPage> {
                 ),
               ),
             SizedBox(
-              height:
-                  MediaQuery.of(context).size.height / 2 -
-                  MediaQuery.of(context).size.height * 0.1,
+              height: MediaQuery.of(context).size.height / 2,
               child: PageView(
                 controller: _pageController, // Použití PageControlleru
                 scrollDirection: Axis.horizontal, // Nastaví swipování do stran
